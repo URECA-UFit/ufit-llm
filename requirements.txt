@@ -34,3 +34,5 @@ typing_extensions==4.14.0
 urllib3==2.4.0
 uvicorn==0.34.3
 zstandard==0.23.0
+pytest
+httpx
