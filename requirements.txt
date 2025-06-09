@@ -15,8 +15,12 @@ jsonpointer==3.0.0
 langchain==0.3.25
 langchain-core==0.3.64
 langchain-text-splitters==0.3.8
+langchain-community==0.3.24
+langchain-postgres==0.0.14
 langsmith==0.3.45
+langchain-openai==0.3.21
 openai==1.84.0
+psycopg2-binary==2.9.10
 orjson==3.10.18
 packaging==24.2
 pydantic==2.11.5
