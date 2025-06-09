@@ -21,8 +21,8 @@ cd ufit-llm
 💡 주의: venv/는 Git에 포함되지 않으며, 각자 로컬에서 생성합니다.
 
 ```bash
-python3 -m venv venv
-source venv/bin/activate  # Windows: venv\Scripts\activate
+python3 -m venv venv # Windows :python -m venv venv
+source venv/bin/activate  # Windows: .\venv\Scripts\Activate
 ```
 
 ### 3. 패키지 설치
