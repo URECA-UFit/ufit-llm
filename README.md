@@ -16,7 +16,7 @@ git clone https://github.com/UREACA-UFit/ufit-llm.git
 cd ufit-llm
 ```
 
-### 2. 가상환경 생성 및 활성화
+### 2. 가상환경 생성 및 활성화!
 
 💡 주의: venv/는 Git에 포함되지 않으며, 각자 로컬에서 생성합니다.
 
