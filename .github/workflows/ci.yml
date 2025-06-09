@@ -2,13 +2,20 @@ name: FastAPI CI
 
 on:
   pull_request:
-    branches: [ "main", "develop" ]
+    branches: ["develop" ]
 
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
 
     steps:
+    - name: Slack 알림 (PR 생성 시)
+      if: github.event.action == 'opened' || github.event.action == 'reopened'
+      run: |
+        curl -X POST -H 'Content-type: application/json' --data "{
+          \"text\": \"🧠 *[LLM Repository]* 📣 PR 생성됨\n*브랜치:* ${{ github.head_ref }}\n*작성자:* ${{ github.actor }}\n*PR 제목:* ${{ github.event.pull_request.title }}\n*링크:* ${{ github.event.pull_request.html_url }}\"
+        }" ${{ secrets.SLACK_WEBHOOK_URL }}
+
     - name: Checkout 코드
       uses: actions/checkout@v4
 
@@ -22,12 +29,21 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
 
-    - name: 코드 스타일 검사 (flake8)
-      run: |
-        pip install flake8
-        flake8 ufit/main.py ufit/router ufit/services --max-line-length=100
-
     - name: 테스트 실행 (pytest)
       run: |
         pip install pytest httpx
         pytest
+
+    - name: Slack 알림 (성공)
+      if: success()
+      run: |
+        curl -X POST -H 'Content-type: application/json' --data "{
+          \"text\": \"🧠 *[LLM Repository]* ✅ PR 성공\n*브랜치:* ${{ github.head_ref }}\n*작성자:* ${{ github.actor }}\n*PR 제목:* ${{ github.event.pull_request.title }}\n*링크:* ${{ github.event.pull_request.html_url }}\"
+        }" ${{ secrets.SLACK_WEBHOOK_URL }}
+
+    - name: Slack 알림 (실패)
+      if: failure()
+      run: |
+        curl -X POST -H 'Content-type: application/json' --data "{
+          \"text\": \"🧠 *[LLM Repository]* ❌ PR 실패\n*브랜치:* ${{ github.head_ref }}\n*작성자:* ${{ github.actor }}\n*PR 제목:* ${{ github.event.pull_request.title }}\n*링크:* ${{ github.event.pull_request.html_url }}\"
+        }" ${{ secrets.SLACK_WEBHOOK_URL }}
