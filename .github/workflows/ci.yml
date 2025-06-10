@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     services:
       postgres:
-        image: postgres:16
+        image: ghcr.io/pgvector/pgvector:pg16
         env:
           POSTGRES_USER: testuser
           POSTGRES_PASSWORD: testpass
