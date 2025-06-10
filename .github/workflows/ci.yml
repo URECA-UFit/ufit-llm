@@ -7,13 +7,39 @@ on:
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: pgvector/pgvector:pg16
+        env:
+          POSTGRES_USER: testuser
+          POSTGRES_PASSWORD: testpass
+          POSTGRES_DB: testdb
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+
+      mongo:
+        image: mongo:8.0.5
+        ports:
+          - 27017:27017
+        options: >-
+          --health-cmd "mongosh --eval 'db.runCommand(\"ping\").ok'"
+
+      redis:
+        image: redis:7.2.5
+        ports:
+          - 6379:6379
+        options: >-
+          --health-cmd "redis-cli ping"
 
     steps:
     - name: Slack 알림 (PR 생성 시)
       if: github.event.action == 'opened' || github.event.action == 'reopened'
       run: |
         curl -X POST -H 'Content-type: application/json' --data "{
-          \"text\": \"🧠 *[LLM Repository]* 📣 PR 생성됨\n*브랜치:* ${{ github.head_ref }}\n*작성자:* ${{ github.actor }}\n*PR 제목:* ${{ github.event.pull_request.title }}\n*링크:* ${{ github.event.pull_request.html_url }}\"
+          \"text\": \"*[LLM Repository]* 📣 PR 생성됨\n*브랜치:* ${{ github.head_ref }}\n*작성자:* ${{ github.actor }}\n*PR 제목:* ${{ github.event.pull_request.title }}\n*링크:* ${{ github.event.pull_request.html_url }}\"
         }" ${{ secrets.SLACK_WEBHOOK_URL }}
 
     - name: Checkout 코드
@@ -24,6 +50,28 @@ jobs:
       with:
         python-version: "3.13"
 
+    - name: Set up .env
+      run: |
+        echo "MONGO_URI=mongodb://localhost:27017/ufit_test" >> .env
+        echo "REDIS_HOST=localhost" >> .env
+        echo "REDIS_PORT=6379" >> .env
+        echo "PGVECTOR_CONNECTIONS_STRING=postgresql://testuser:testpass@localhost:5432/testdb" >> .env
+        echo "OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }}" >> .env
+        echo "CLAUDE_API_KEY=${{ secrets.CLAUDE_API_KEY }}" >> .env
+
+    - name: PostgreSQL 초기화
+      env:
+        PGPASSWORD: testpass
+      run: |
+        for i in {1..10}; do
+          if psql -h localhost -U testuser -d testdb -c 'SELECT 1;' &>/dev/null; then
+            break
+          fi
+          sleep 2
+        done
+        
+        psql -h localhost -U testuser -d testdb -c 'CREATE EXTENSION IF NOT EXISTS vector;'
+    
     - name: pip 업데이트 및 의존성 설치
       run: |
         python -m pip install --upgrade pip
@@ -38,12 +86,12 @@ jobs:
       if: success()
       run: |
         curl -X POST -H 'Content-type: application/json' --data "{
-          \"text\": \"🧠 *[LLM Repository]* ✅ PR 성공\n*브랜치:* ${{ github.head_ref }}\n*작성자:* ${{ github.actor }}\n*PR 제목:* ${{ github.event.pull_request.title }}\n*링크:* ${{ github.event.pull_request.html_url }}\"
+          \"text\": \"*[LLM Repository]* ✅ PR 성공\n*브랜치:* ${{ github.head_ref }}\n*작성자:* ${{ github.actor }}\n*PR 제목:* ${{ github.event.pull_request.title }}\n*링크:* ${{ github.event.pull_request.html_url }}\"
         }" ${{ secrets.SLACK_WEBHOOK_URL }}
 
     - name: Slack 알림 (실패)
       if: failure()
       run: |
         curl -X POST -H 'Content-type: application/json' --data "{
-          \"text\": \"🧠 *[LLM Repository]* ❌ PR 실패\n*브랜치:* ${{ github.head_ref }}\n*작성자:* ${{ github.actor }}\n*PR 제목:* ${{ github.event.pull_request.title }}\n*링크:* ${{ github.event.pull_request.html_url }}\"
+          \"text\": \"*[LLM Repository]* ❌ PR 실패\n*브랜치:* ${{ github.head_ref }}\n*작성자:* ${{ github.actor }}\n*PR 제목:* ${{ github.event.pull_request.title }}\n*링크:* ${{ github.event.pull_request.html_url }}\"
         }" ${{ secrets.SLACK_WEBHOOK_URL }}
