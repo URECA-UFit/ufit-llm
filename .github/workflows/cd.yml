@@ -102,7 +102,7 @@ jobs:
         port: 22
         script: |
           docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_HUB_TOKEN }}
-          cd ${{ env.EC2_DIR }}
+          cd /home/ubuntu/ufit
           docker compose pull
           docker compose up -d --remove-orphans
 
