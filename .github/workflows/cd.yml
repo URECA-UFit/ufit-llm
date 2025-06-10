@@ -31,7 +31,7 @@ jobs:
 
     - name: Install deps & run pytest
       run: |
-        pip install -r ufit/requirements.txt
+        pip install -r requirements.txt
         pytest -c ufit/pytest.ini
 
     # ---------- Slack 알림 ----------
