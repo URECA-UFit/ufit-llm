@@ -15,7 +15,7 @@ jsonpointer==3.0.0
 langchain==0.3.25
 langchain-core==0.3.64
 langchain-text-splitters==0.3.8
-langchain-community==0.3.24
+langchain-community==0.3.17
 langchain-postgres==0.0.14
 langsmith==0.3.45
 langchain-openai==0.3.21
