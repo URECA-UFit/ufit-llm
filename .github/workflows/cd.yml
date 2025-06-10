@@ -32,7 +32,7 @@ jobs:
     - name: Install deps & run pytest
       run: |
         pip install -r requirements.txt
-        pytest -c ufit/pytest.ini
+        pytest -c pytest.ini
 
     # ---------- Slack 알림 ----------
     - name: Notify Slack – SUCCESS
