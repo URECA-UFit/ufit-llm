@@ -103,8 +103,8 @@ jobs:
         script: |
           docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_HUB_TOKEN }}
           cd /home/ubuntu/ufit
-          docker compose pull
-          docker compose up -d --remove-orphans
+          docker-compose pull
+          docker-compose up -d --remove-orphans
 
     # ---------- Slack 알림 ----------
     - name: Notify Slack – SUCCESS
