@@ -1,66 +1,99 @@
 name: FastAPI Prod CI/CD
 
 on:
+  # 1) PR 생성/수정 : 빌드·테스트만
   pull_request:
     branches: [ "prod" ]
 
+  # 2) prod 브랜치에 머지(push) : 도커 빌드 + 배포
+  push:
+    branches: [ "prod" ]
+
+env:
+  DOCKER_IMAGE: ${{ secrets.DOCKER_USERNAME }}/ufit_ai          # 공통 이미지명
+  EC2_DIR: /home/ubuntu/ufit                                     # compose 경로
+  SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL }}
+
 jobs:
-  build-and-test:
+##################################################################
+#  PR 단계 : Build & Test  ---------------------------------------
+##################################################################
+  test:
+    if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
 
     steps:
-    - name: Slack 알림 (PR 생성 시)
-      if: github.event.action == 'opened' || github.event.action == 'reopened'
-      run: |
-        curl -X POST -H 'Content-type: application/json' --data "{
-          \"text\": \"🧠 *[LLM Repository]* 📣 [배포 PR 생성됨]\n*브랜치:* ${{ github.head_ref }} → prod\n*작성자:* ${{ github.actor }}\n*제목:* ${{ github.event.pull_request.title }}\n*링크:* ${{ github.event.pull_request.html_url }}\"
-        }" ${{ secrets.SLACK_WEBHOOK_URL }}
+    - uses: actions/checkout@v4
 
-    - name: Checkout 코드
-      uses: actions/checkout@v4
-
-    - name: Python 셋업
-      uses: actions/setup-python@v5
+    - uses: actions/setup-python@v5
       with:
         python-version: "3.10"
 
-    - name: 의존성 설치 + 테스트
+    - name: Install deps & run pytest
       run: |
-        pip install -r requirements.txt
-        pip install pytest httpx
-        pytest
+        pip install -r ufit/requirements.txt
+        pytest -c ufit/pytest.ini
 
-  docker-build-push:
+    # ---------- Slack 알림 ----------
+    - name: Notify Slack – SUCCESS
+      if: success()
+      run: |
+        curl -X POST -H 'Content-Type: application/json' -d "{
+          \"text\":\"🧠 *[LLM Repo]* ✅ *PR 테스트 통과*\n*PR:* <${{ github.event.pull_request.html_url }}|#${{ github.event.pull_request.number }} – ${{ github.event.pull_request.title }}>\n*작성자:* ${{ github.actor }}\"
+        }" $SLACK_WEBHOOK
+
+    - name: Notify Slack – FAILURE
+      if: failure()
+      run: |
+        curl -X POST -H 'Content-Type: application/json' -d "{
+          \"text\":\"🧠 *[LLM Repo]* ❌ *PR 테스트 실패*\n*PR:* <${{ github.event.pull_request.html_url }}|#${{ github.event.pull_request.number }} – ${{ github.event.pull_request.title }}>\n*작성자:* ${{ github.actor }}\"
+        }" $SLACK_WEBHOOK
+
+##################################################################
+#  머지(push) 단계 : Build -> Push -> Deploy  --------------------
+##################################################################
+  build-push:
+    if: github.event_name == 'push'
     runs-on: ubuntu-latest
-    needs: build-and-test
 
     steps:
-    - name: Checkout 코드
-      uses: actions/checkout@v4
+    - uses: actions/checkout@v4
 
-    - name: Docker 로그인
-      uses: docker/login-action@v3
+    - uses: docker/login-action@v3
       with:
         username: ${{ secrets.DOCKER_USERNAME }}
         password: ${{ secrets.DOCKER_HUB_TOKEN }}
 
-    - name: Docker 이미지 빌드 및 푸시
+    - name: Build & Push Docker
       run: |
-        docker build -t ${{ secrets.DOCKER_USERNAME }}/ufit_ai:latest .
-        docker push ${{ secrets.DOCKER_USERNAME }}/ufit_ai:latest
+        TAG=${{ github.sha }}
+        docker build -f ufit/Dockerfile -t $DOCKER_IMAGE:$TAG .
+        docker tag $DOCKER_IMAGE:$TAG $DOCKER_IMAGE:latest
+        docker push --all-tags $DOCKER_IMAGE
 
-    - name: Slack 알림 (도커 푸시 성공)
+    # ---------- Slack 알림 ----------
+    - name: Notify Slack – SUCCESS
+      if: success()
       run: |
-        curl -X POST -H 'Content-type: application/json' --data "{
-          \"text\": \"🧠 *[LLM Repository]* ✅ Docker Hub 푸시 완료\n📦 이미지: ${{ secrets.DOCKER_USERNAME }}/ufit_ai:latest\"
-        }" ${{ secrets.SLACK_WEBHOOK_URL }}
+        curl -X POST -H 'Content-Type: application/json' -d "{
+          \"text\":\"🧠 *[LLM Repo]* ✅ Docker Hub 푸시 성공\n*이미지:* $DOCKER_IMAGE:latest\"
+        }" $SLACK_WEBHOOK
 
+    - name: Notify Slack – FAILURE
+      if: failure()
+      run: |
+        curl -X POST -H 'Content-Type: application/json' -d "{
+          \"text\":\"🧠 *[LLM Repo]* ❌ Docker Build/Push 실패\"
+        }" $SLACK_WEBHOOK
+
+##################################################################
   deploy:
+    if: github.event_name == 'push'
     runs-on: ubuntu-latest
-    needs: docker-build-push
+    needs: build-push
 
     steps:
-    - name: EC2 서버에 배포
+    - name: Deploy on EC2 via SSH
       uses: appleboy/ssh-action@master
       with:
         host: ${{ secrets.EC2_HOST }}
@@ -69,13 +102,21 @@ jobs:
         port: 22
         script: |
           docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_HUB_TOKEN }}
-          docker pull ${{ secrets.DOCKER_USERNAME }}/ufit_ai:latest
-          docker stop ufit_ai || true
-          docker rm ufit_ai || true
-          docker run -d --name ufit_ai -p 8000:8000 ${{ secrets.DOCKER_USERNAME }}/ufit_ai:latest
+          cd ${{ env.EC2_DIR }}
+          docker compose pull
+          docker compose up -d --remove-orphans
 
-    - name: Slack 알림 (배포 완료)
+    # ---------- Slack 알림 ----------
+    - name: Notify Slack – SUCCESS
+      if: success()
       run: |
-        curl -X POST -H 'Content-type: application/json' --data "{
-          \"text\": \"🧠 *[LLM Repository]* 🚀 EC2 배포 완료\n🔗 서버: ${{ secrets.EC2_HOST }}\n📦 이미지: ${{ secrets.DOCKER_USERNAME }}/ufit_ai:latest\"
-        }" ${{ secrets.SLACK_WEBHOOK_URL }}
+        curl -X POST -H 'Content-Type: application/json' -d "{
+          \"text\":\"🧠 *[LLM Repo]* 🚀 EC2 배포 완료\n*서버:* ${{ secrets.EC2_HOST }}\n*이미지:* $DOCKER_IMAGE:latest\"
+        }" $SLACK_WEBHOOK
+
+    - name: Notify Slack – FAILURE
+      if: failure()
+      run: |
+        curl -X POST -H 'Content-Type: application/json' -d "{
+          \"text\":\"🧠 *[LLM Repo]* ❌ EC2 배포 실패\"
+        }" $SLACK_WEBHOOK
