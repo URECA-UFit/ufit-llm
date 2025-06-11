@@ -2,7 +2,7 @@ name: FastAPI CI
 
 on:
   pull_request:
-    branches: ["develop" ]
+    branches: ["develop", "prod" ]
 
 jobs:
   build-and-test:
