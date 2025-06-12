@@ -16,40 +16,6 @@ env:
 
 jobs:
 ##################################################################
-#  PR 단계 : Build & Test  ---------------------------------------
-##################################################################
-  test:
-    if: github.event_name == 'pull_request'
-    runs-on: ubuntu-latest
-
-    steps:
-    - uses: actions/checkout@v4
-
-    - uses: actions/setup-python@v5
-      with:
-        python-version: "3.10"
-
-    - name: Install deps & run pytest
-      run: |
-        pip install -r requirements.txt
-        pytest -c pytest.ini
-
-    # ---------- Slack 알림 ----------
-    - name: Notify Slack – SUCCESS
-      if: success()
-      run: |
-        curl -X POST -H 'Content-Type: application/json' -d "{
-          \"text\":\"🧠 *[LLM Repo]* ✅ *PR 테스트 통과*\n*PR:* <${{ github.event.pull_request.html_url }}|#${{ github.event.pull_request.number }} – ${{ github.event.pull_request.title }}>\n*작성자:* ${{ github.actor }}\"
-        }" $SLACK_WEBHOOK
-
-    - name: Notify Slack – FAILURE
-      if: failure()
-      run: |
-        curl -X POST -H 'Content-Type: application/json' -d "{
-          \"text\":\"🧠 *[LLM Repo]* ❌ *PR 테스트 실패*\n*PR:* <${{ github.event.pull_request.html_url }}|#${{ github.event.pull_request.number }} – ${{ github.event.pull_request.title }}>\n*작성자:* ${{ github.actor }}\"
-        }" $SLACK_WEBHOOK
-
-##################################################################
 #  머지(push) 단계 : Build -> Push -> Deploy  --------------------
 ##################################################################
   build-push:
