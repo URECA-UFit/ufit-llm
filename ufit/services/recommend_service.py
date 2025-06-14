@@ -74,21 +74,30 @@ def make_recommend(
     
     '''
 
-    # 3) 과거 6턴 가져오기
+    # 4) 과거 6턴 가져오기
     past_msgs: List[HumanMessage | AIMessage] = history.messages[-6:]
+    past_prompt = f"The following is the previous conversation history:\n"
+    
+    for msg in past_msgs:
+        if isinstance(msg,HumanMessage):
+            past_prompt += f"- user: {msg.content}\n"
+        else:
+            past_prompt += f"- ai: {msg.content}\n"
 
-    # 4) 유저 메시지 기록
-    history.add_user_message(base_prompt)
 
     # 5) 사용자 정보 블록 생성
     user_info: UserFullInfoDTO = get_user_full_info(user_id, postgre_db, mongo_db)
     user_block = (
-        "다음은 사용자 정보입니다:\n"
-        f"- 이메일: {user_info.email}\n"
-        f"- 나이: {user_info.age}\n"
-        f"- 성별: {user_info.gender}\n"
-        f"- 현재 요금제: {user_info.rate_plan.plan_name}\n"
-        f"- 기본요금: {user_info.rate_plan.monthly_fee}\n\n"
+        "The following is the user information:\n"
+        f"- Email: {user_info.email}\n"
+        f"- Age: {user_info.age}\n"
+        f"- Gender: {user_info.gender}\n"
+        f"- Current plan: {user_info.rate_plan.plan_name}\n"
+        f"- Base monthly fee: {user_info.rate_plan.monthly_fee}\n"
+        f"- Data usage: {user_info.data_usages}\n"
+        f"- Call usage: {user_info.call_usages}\n"
+        f"- SMS usage: {user_info.sms_usages}\n"
+        f"- Mobile devices in use: {user_info.devices}\n\n"
     )
 
     # 6) PromptTemplate 정의
@@ -97,10 +106,9 @@ def make_recommend(
             "You are the best rate-plan recommendation chatbot. Always respond in Korean."
         ),
         HumanMessagePromptTemplate.from_template(
-            "{user_block}"
-            "다음 요금제 정보를 참고해 답변해 주세요:\n\n"
-            "{retrieved_block}\n\n"
-            "사용자 질문: {base_prompt}"
+            f"user information {user_block}\n"
+            f"Rate plan recommendation embedding information: {retrieved_block}\n"
+            f"User question: {base_prompt}\n\n"
         ),
     ])
 
@@ -113,7 +121,7 @@ def make_recommend(
 
     # 8) 최종 LLM 입력 = 과거 히스토리 + 방금 렌더링된 메시지
     llm_messages: List[HumanMessage | AIMessage] = []
-    llm_messages.extend(past_msgs)
+    llm_messages.extend(past_prompt)
     llm_messages.extend(rendered_msgs)
 
     # 9) LLM 호출
@@ -121,6 +129,7 @@ def make_recommend(
     answer = response_msg.content.strip()
 
     # 10) 답변 기록
+    history.add_user_message(base_prompt)
     history.add_ai_message(answer)
 
     return answer
