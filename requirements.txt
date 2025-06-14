@@ -40,3 +40,4 @@ uvicorn==0.34.3
 zstandard==0.23.0
 pytest
 httpx
+pymongo
