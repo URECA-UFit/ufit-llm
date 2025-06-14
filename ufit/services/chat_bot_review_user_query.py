@@ -20,29 +20,19 @@ llm_model = ChatAnthropic(
 
 
 def get_user_queries_after_recommendation(mongo_db: Database, chat_room_id: int, recommendation_message_id_str: str, limit: int = 10) -> List[str]:
-    """
-    특정 추천 메시지 ID부터 미래(더 최신)로 올라가면서, 다음 챗봇 추천 메시지 전까지의 유저 메시지 최신 10개 추출.
-    """
-    print(f"[DEBUG] get_user_queries_after_recommendation 호출. chatRoom ID: {chat_room_id}, 시작 메시지 ID: {recommendation_message_id_str}")
-    
     try:
         recommendation_obj_id = ObjectId(recommendation_message_id_str)
     except Exception as e:
-        print(f"[DEBUG] 유효하지 않은 ObjectId: {e}")
         return []
 
-    # 1. 해당 채팅방의 메시지 중, 시작점 메시지보다 이후이거나 같은 메시지를 _id 오름차순으로 가져옴
-    # 이렇게 하면 시작 메시지부터 미래(더 최신)로 순회할 수 있음.
     messages_cursor = mongo_db.chat_bot_messages.find(
         {"chatRoom_id": chat_room_id, "_id": {"$gte": recommendation_obj_id}}
-    ).sort("_id", 1) # 오름차순 정렬 (오래된 것부터 최신으로)
+    ).sort("_id", 1)
     
     messages = list(messages_cursor)
-    print(f"[DEBUG] Raw messages from DB (시작점 포함, {len(messages)}개): ")
     for i, msg_item in enumerate(messages):
         print(f"  [DEBUG] {i+1}. {msg_item}")
 
-    print("[DEBUG] === 메시지 필터링 시작 (시작 추천 메시지 이후 유저 질의 수집) ===")
     user_msgs_to_summarize = []
     found_start_recommendation = False
 
@@ -51,53 +41,30 @@ def get_user_queries_after_recommendation(mongo_db: Database, chat_room_id: int,
         msg_owner = msg.get("owner", False)
         is_recommendation_msg = (not msg_owner and "추천" in msg_content)
         
-        # 시작 메시지 ID를 찾았을 때부터 실제 필터링 시작
         if msg["_id"] == recommendation_obj_id:
             found_start_recommendation = True
-            print(f"[DEBUG] 시작점 추천 메시지 발견! 내용: '{msg_content}'")
-            continue # 이 메시지는 건너뛰고 다음 메시지부터 수집
+            continue
         
-        # 시작점 추천 메시지를 아직 찾지 못했으면 무시 (이전 메시지들)
         if not found_start_recommendation:
-            print(f"[DEBUG] 시작점 메시지 이전에 발견된 메시지 (무시): Owner={msg_owner}, Content='{msg_content}'")
             continue
 
-        print(f"[DEBUG] 현재 메시지 처리: Owner={msg_owner}, Content='{msg_content}', IsRecommendation='{is_recommendation_msg}'")
-
-        # 챗봇 메시지에서 다음 추천 키워드가 있으면 순회 중단
         if is_recommendation_msg:
-            print(f"[DEBUG] >>> 다음 추천 메시지 발견! 순회 중단. 내용: '{msg_content}'")
             break
         
-        # 유저 메시지면 리스트에 추가
         if msg_owner:
             user_msgs_to_summarize.append(msg_content)
-            print(f"[DEBUG] >>> 유저 메시지 추가: '{msg_content}', 현재 유저 메시지 개수: {len(user_msgs_to_summarize)}")
         
         if len(user_msgs_to_summarize) == limit:
-            print(f"[DEBUG] >>> 유저 메시지 {limit}개 도달, 순회 중단.")
             break
             
-    print("[DEBUG] === 메시지 필터링 종료 ===")
-    print(f"[DEBUG] 최종 필터링된 유저 메시지 개수: {len(user_msgs_to_summarize)}")
-    print(f"[DEBUG] 최종 필터링된 유저 메시지:\n{user_msgs_to_summarize}")
-    
-    # 수집된 메시지는 이미 오래된 것 -> 최신 순서 (오름차순 순회) 이므로 그대로 반환
-    return user_msgs_to_summarize # 최종적으로 과거→최신 순서로 반환
+    return user_msgs_to_summarize
 
 
 def summarize_user_queries_with_llm(user_msgs: List[str]) -> str:
-    """
-    유저 메시지 리스트를 LLM(클로드)로 요약
-    """
     if not user_msgs:
         return "요약할 유저 메시지가 없습니다."
     
-    print(f"[DEBUG] 요약할 유저 메시지 ({len(user_msgs)}개): {user_msgs}")
-    
     joined = "\n".join(user_msgs)
-    
-    print(f"[DEBUG] LLM 입력 Joined String:\n{joined}")
     
     prompt = ChatPromptTemplate.from_messages([
         SystemMessagePromptTemplate.from_template(
@@ -109,10 +76,6 @@ def summarize_user_queries_with_llm(user_msgs: List[str]) -> str:
     ])
     rendered_msgs = prompt.format_prompt(user_queries=joined).to_messages()
     
-    print(f"[DEBUG] LLM에 전달될 최종 메시지:\n{rendered_msgs}")
-    
     response_msg = llm_model.invoke(rendered_msgs)
-    
-    print(f"[DEBUG] LLM 원시 응답:\n{response_msg}")
     
     return response_msg.content.strip()
