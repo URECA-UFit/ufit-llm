@@ -1,3 +1,6 @@
+import os
+from dotenv import load_dotenv
+
 from functools import lru_cache
 from pymongo import MongoClient
 from pymongo.database import Database
@@ -5,12 +8,15 @@ from sqlalchemy import create_engine, Table, MetaData
 from sqlalchemy.orm import sessionmaker, declarative_base, Session
 from fastapi import Depends
 
+load_dotenv()
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+
 # SQLAlchemy 기본 설정
 
 Base = declarative_base()
 
 # PostgreSQL 연결 URL
-POSTGRES_URL = "postgresql+psycopg2://ufit:a303303@localhost:5432/ufit_db"
+POSTGRES_URL = os.getenv("POSTGRESQL_URL")
 # echo=True 로 SQL 로그 보기
 engine = create_engine(POSTGRES_URL, echo=True)
 
@@ -31,7 +37,7 @@ def get_db() -> Session: # type: ignore
 
 # MongoDB 기본 설정
 
-MONGO_URL = "mongodb://localhost:27017"
+MONGO_URL = os.getenv("MONGO_URL")
 
 # 싱글톤 클라이언트 관리
 @lru_cache()
