@@ -4,7 +4,7 @@ from dotenv import load_dotenv
 from functools import lru_cache
 from pymongo import MongoClient
 from pymongo.database import Database
-from sqlalchemy import create_engine, Table, MetaData
+from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, declarative_base, Session
 from fastapi import Depends
 
