@@ -4,8 +4,6 @@ from sqlalchemy.orm import Session
 from pymongo.database import Database
 from ufit.database.database import get_db, get_mongo_db
 from pydantic import BaseModel
-from ufit.dto.user_info import UserFullInfoDTO
-from ufit.services.user_service import get_user_full_info
 from typing import List
 
 recommend_router = APIRouter()
@@ -18,18 +16,20 @@ def recommend_plan(query: str = Query(..., description="query about plans")):
 
 class RecommendRequest(BaseModel):
     user_id: int
-    recommend: str
+    context: str
+    chat_room_id: int
 
-
-@recommend_router.post("/api/chats/message/ai", response_model=List[str])
-def make_recommend_endpoint( req: RecommendRequest, db: Session = Depends(get_db), mongo_db: Database = Depends(get_mongo_db)):
-    
-    prompt = make_recommend(
+@recommend_router.post("/api/chats/message/ai")
+def make_recommend_endpoint(
+    req: RecommendRequest,
+    db: Session = Depends(get_db),
+    mongo_db: Database = Depends(get_mongo_db),
+):
+    recs = make_recommend(
         user_id=req.user_id,
-        base_prompt=req.recommend,
+        base_prompt=req.context,
+        chat_room_id=req.chat_room_id,
         postgre_db=db,
         mongo_db=mongo_db,
     )
-
-    return prompt
- 
+    return recs
