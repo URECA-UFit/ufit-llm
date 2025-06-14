@@ -16,7 +16,7 @@ OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 Base = declarative_base()
 
 # PostgreSQL 연결 URL
-POSTGRES_URL = os.getenv("POSTGRESQL_URL")
+POSTGRES_URL = os.getenv("PGVECTOR_CONNECTIONS_STRING")
 # echo=True 로 SQL 로그 보기
 engine = create_engine(POSTGRES_URL, echo=True)
 
