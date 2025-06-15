@@ -13,8 +13,15 @@ recommend_router = APIRouter()
 @recommend_router.get("/recommend")
 def recommend_plan(query: str = Query(..., description="query about plans")):
     results = search_similar_plans(query)
-    return {"query": query, "recommendations": results}
-
+    return {
+        "query": query, 
+        "recommendations": [
+            {
+                "content": result["content"],
+                "scoer": result["score"]
+            } for result in results
+        ]
+    }   
 
 class RecommendRequest(BaseModel):
     user_id: int

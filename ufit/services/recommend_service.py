@@ -28,8 +28,8 @@ vectorstore = PGVector(
 )
 
 def search_similar_plans(query: str, k: int = 2):
-    results = vectorstore.similarity_search(query, k=k)
-    return [doc.page_content for doc in results]
+    results = vectorstore.similarity_search_with_score(query, k=k)
+    return [{"content": doc.page_content, "score": score} for doc, score in results]
 
 
 def make_recommend( user_id: int, base_prompt: str, postgre_db: Session, mongo_db: Database,):
