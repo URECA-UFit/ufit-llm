@@ -43,5 +43,5 @@ httpx
 pymongo
 langchain-anthropic>=0.3.0
 anthropic>=0.25.0
-langchain-mongodb>=0.1.1
-mongomock
+langchain-community
+langchain_mongo_db
