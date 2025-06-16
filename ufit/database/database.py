@@ -48,7 +48,7 @@ def get_mongo_client() -> MongoClient:
 def get_mongo_db(
     client: MongoClient = Depends(get_mongo_client),
 ) -> Database:
-    return client["ufit_db"]
+    return client["ufit"]
 
 # MongoDB 챗봇 대화 저장
 def save_chat_bot_message(
