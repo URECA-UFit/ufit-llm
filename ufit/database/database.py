@@ -49,3 +49,22 @@ def get_mongo_db(
     client: MongoClient = Depends(get_mongo_client),
 ) -> Database:
     return client["ufit_db"]
+
+# MongoDB 챗봇 대화 저장
+def save_chat_bot_message(
+    collection,
+    content: str,
+    owner: bool,
+    chat_room_id: int,
+    a_plan_id: str | None = None,
+    b_plan_id: str | None = None,
+) -> str:
+    result = collection.insert_one({
+        "content": content,
+        "owner": owner,
+        "chat_room_id": chat_room_id,
+        "a_plan_id": a_plan_id,
+        "b_plan_id": b_plan_id
+    })
+
+    return result.inserted_id
