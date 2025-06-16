@@ -27,12 +27,15 @@ dummy_retrieved_block = """
 - 5G 슬림+ 요금제: 월 45,000원에 10GB + 1Mbps 속도제한 (유사도: 0.79)
 """
 
+empty_history = []
+
 # 테스트 실행
 for query in test_queries:
     messages = get_prompt(
         user_block=dummy_user_block,
         retrieved_block=dummy_retrieved_block,
-        base_prompt=query
+        base_prompt=query,
+        history=empty_history
     )
 
     response = get_llm_response(messages)

@@ -48,10 +48,13 @@ llm_model = ChatAnthropic(
 def contains_banned_words(text: str) -> bool:
     return any(keyword in text for keyword in BANNED_KEYWORDS)
 
-def get_prompt(user_block: str, retrieved_block: str, base_prompt: str):
+def get_prompt(history: str, user_block: str, retrieved_block: str, base_prompt: str):
     prompt = ChatPromptTemplate.from_messages([
         SystemMessagePromptTemplate.from_template(SYSTEM_PROMPT),
         HumanMessagePromptTemplate.from_template(
+            "[이전 대화 내역]\n"
+            "{history}\n\n"
+
             "[사용자 질문]\n"
             "{base_prompt}\n\n"
 
@@ -73,6 +76,7 @@ def get_prompt(user_block: str, retrieved_block: str, base_prompt: str):
         )
     ])
     return prompt.format_prompt(
+        history=history,
         user_block=user_block,
         retrieved_block=retrieved_block,
         base_prompt=base_prompt

@@ -3,7 +3,7 @@ from dotenv import load_dotenv
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from pymongo import MongoClient
-from ufit.services.recommend_service_hj import make_recommend
+from ufit.services.recommend_service import make_recommend
 
 # .env 불러오기
 load_dotenv()
@@ -29,6 +29,9 @@ MONGO_URI = os.getenv("MONGO_URI")
 mongo_client = MongoClient(MONGO_URI)
 mongo_db = mongo_client.get_database() 
 
+empty_history = []
+
+
 # 테스트 실행
 if __name__ == "__main__":
     try:
@@ -52,7 +55,8 @@ if __name__ == "__main__":
                 chat_room_id=TEST_CHAT_ROOM_ID,
                 postgre_db=pg_session,
                 mongo_db=mongo_db,
-                is_recommend_question=is_recommend
+                is_recommend_question=is_recommend,
+                history=empty_history
             )
             print("✅ 응답 결과:")
             print(response)
