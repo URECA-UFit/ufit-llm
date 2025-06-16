@@ -3,7 +3,7 @@ from typing import List
 
 class RecommendRequest(BaseModel):
     userId: int
-    context: str
+    content: str
     chatRoomId: int
 
 class PlanDTO(BaseModel):

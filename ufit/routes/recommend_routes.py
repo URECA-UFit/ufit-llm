@@ -19,7 +19,7 @@ def make_recommend_endpoint(
 ) -> RecommendResponse:
     recs = make_recommend(
         user_id=req.userId,
-        base_prompt=req.context,
+        base_prompt=req.content,
         chat_room_id=req.chatRoomId,
         postgre_db=db,
         mongo_db=mongo_db,
