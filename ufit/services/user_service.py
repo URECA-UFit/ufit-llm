@@ -9,6 +9,8 @@ from ufit.dto.user_info import MobileDeviceDTO, UsageDTO, UserFullInfoDTO
 
 def get_user_full_info(user_id: int, postgre_db: Session, mongo_db: Database ) -> UserFullInfoDTO:
     
+    if(user_id==-1): return None
+
     # 1) PostgreSQL에서 사용자 조회
     user = postgre_db.query(User).filter(User.user_id == user_id).first()
     if user is None:
