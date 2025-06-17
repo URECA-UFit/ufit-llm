@@ -7,6 +7,11 @@ from langchain_openai import OpenAIEmbeddings
 from langchain_community.vectorstores.pgvector import PGVector
 from ufit.services.formatter import generate_final_output
 from dotenv import load_dotenv
+from ufit.exceptions import (
+    RatePlanNotFoundException,
+    VectorCreateException,
+    VectorDeleteException,
+)
 
 load_dotenv()
 
@@ -37,22 +42,24 @@ vectorstore = PGVector(
 def embed_single_rateplan(rateplan_id: str):
     plan = collection.find_one({"_id": ObjectId(rateplan_id)})
     if not plan:
-        print(f" MongoDB에 해당 요금제 ID {rateplan_id} 없음")
-        return
+        raise RatePlanNotFoundException()
 
-    doc = Document(
-        page_content=generate_final_output(plan),
-        metadata={
-            "mongo_id": str(plan["_id"]),
-            "plan_name": plan.get("plan_name", ""),
-            "idx": plan.get("idx", ""),
-        },
-    )
-
-    vectorstore.add_documents([doc])
-    print(f"요금제 {rateplan_id} 임베딩 완료")
+    try:
+        doc = Document(
+            page_content=generate_final_output(plan),
+            metadata={
+                "mongo_id": str(plan["_id"]),
+                "plan_name": plan.get("plan_name", ""),
+                "idx": plan.get("idx", ""),
+            },
+        )
+        vectorstore.add_documents([doc])
+    except Exception as e:
+        raise VectorCreateException(str(e))
 
 
 def delete_rateplan_vector(rateplan_id: str):
-    vectorstore.delete(filter={"mongo_id": rateplan_id})
-    print(f"요금제 {rateplan_id} 벡터 삭제 완료")
+    try:
+        vectorstore.delete(filter={"mongo_id": rateplan_id})
+    except Exception as e:
+        raise VectorDeleteException(str(e))
