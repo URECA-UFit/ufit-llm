@@ -5,7 +5,6 @@ from bson import ObjectId
 
 
 class RatePlan(BaseModel):
-    id: ObjectId = Field(default_factory=ObjectId, alias="_id")
 
     plan_name: str
     summary: str
@@ -20,10 +19,11 @@ class RatePlan(BaseModel):
     is_enabled: bool
     is_deleted: bool
 
-    created_at: datetime = Field(default_factory=datetime.now(timezone.utc))
-    updated_at: datetime = Field(default_factory=datetime.now(timezone.utc))
+    created_at: datetime = Field(default_factory=timezone.utc, alias="createdAt")
+    updated_at: datetime = Field(default_factory=timezone.utc, alias="updatedAt")
 
     class Config:
-        arbitrary_types_allowed = True
+        populate_by_name = True
         json_encoders = {ObjectId: str}
-        validate_by_name = True
+        arbitrary_types_allowed = True
+        extra = "ignore"
