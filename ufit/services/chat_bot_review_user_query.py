@@ -18,6 +18,8 @@ llm_model = ChatAnthropic(
     temperature=0.3
 )
 
+# 컬렉션 이름 상수 정의
+CHAT_BOT_MESSAGES_COLLECTION = "chat_bot_messages"
 
 def get_user_queries_after_recommendation(mongo_db: Database, chat_room_id: int, recommendation_message_id_str: str, limit: int = 10) -> List[str]:
     try:
@@ -25,14 +27,11 @@ def get_user_queries_after_recommendation(mongo_db: Database, chat_room_id: int,
     except Exception as e:
         return []
 
-    messages_cursor = mongo_db.chat_bot_messages.find(
-        {"chatRoom_id": chat_room_id, "_id": {"$gte": recommendation_obj_id}}
-    ).sort("_id", 1)
+    messages_cursor = mongo_db[CHAT_BOT_MESSAGES_COLLECTION].find(
+        {"chat_room_id": chat_room_id, "_id": {"$lte": recommendation_obj_id}}
+    ).sort("_id", -1)
     
     messages = list(messages_cursor)
-    for i, msg_item in enumerate(messages):
-        print(f"  [DEBUG] {i+1}. {msg_item}")
-
     user_msgs_to_summarize = []
     found_start_recommendation = False
 
