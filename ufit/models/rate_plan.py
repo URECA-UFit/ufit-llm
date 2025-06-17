@@ -19,8 +19,12 @@ class RatePlan(BaseModel):
     is_enabled: bool
     is_deleted: bool
 
-    created_at: datetime = Field(default_factory=timezone.utc, alias="createdAt")
-    updated_at: datetime = Field(default_factory=timezone.utc, alias="updatedAt")
+    created_at: datetime = Field(
+        default_factory=lambda: datetime.now(timezone.utc), alias="createdAt"
+    )
+    updated_at: datetime = Field(
+        default_factory=lambda: datetime.now(timezone.utc), alias="updatedAt"
+    )
 
     class Config:
         populate_by_name = True
