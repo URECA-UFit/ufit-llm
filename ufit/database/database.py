@@ -7,6 +7,7 @@ from pymongo.database import Database
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, declarative_base, Session
 from fastapi import Depends
+from typing import Optional, List, Dict
 
 load_dotenv()
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
@@ -51,20 +52,14 @@ def get_mongo_db(
     return client["ufit"]
 
 # MongoDB 챗봇 대화 저장
-def save_chat_bot_message(
-    collection,
-    content: str,
-    owner: bool,
-    chat_room_id: int,
-    a_plan_id: str | None = None,
-    b_plan_id: str | None = None,
-) -> str:
-    result = collection.insert_one({
+def save_chat_bot_message(collection, content: str, owner: bool, chat_room_id: int, recommend_plan: Optional[List[Dict[str, str]]] = None):
+    doc = {
         "content": content,
         "owner": owner,
         "chat_room_id": chat_room_id,
-        "a_plan_id": a_plan_id,
-        "b_plan_id": b_plan_id
-    })
+    }
+    if recommend_plan:
+        doc["recommend_plan"] = recommend_plan
 
+    result = collection.insert_one(doc)
     return result.inserted_id

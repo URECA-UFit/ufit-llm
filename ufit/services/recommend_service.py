@@ -20,7 +20,7 @@ from langchain.prompts import (
 )
 from langchain.schema import AIMessage, HumanMessage
 
-from typing import Annotated, TypedDict, List, Dict, Any, Optional
+from typing import Annotated, TypedDict, List, Dict
 from langgraph.graph import StateGraph, START, END
 from langgraph.graph.message import add_messages
 from itertools import islice
@@ -288,20 +288,30 @@ def make_recommend(
 
     chat_bot_messages = mongo_db.get_collection("chat_bot_messages")
 
+    # 사용자 메시지 저장 
     save_chat_bot_message(
         collection=chat_bot_messages,
         content=base_prompt,
         owner=True,
-        chat_room_id=chat_room_id,
+        chat_room_id=chat_room_id
     )
+
+    # 2) 메시지 저장 
+    recommend_plans = []
+    a_plan = result_state["a_plan"]
+    b_plan = result_state["b_plan"]
+
+    if a_plan.planId and a_plan.name:
+        recommend_plans.append({"planId": a_plan.planId, "name": a_plan.name})
+    if b_plan.planId and b_plan.name:
+        recommend_plans.append({"planId": b_plan.planId, "name": b_plan.name})
 
     message_id = save_chat_bot_message(
         collection=chat_bot_messages,
         content=result_state["final_answer"],
         owner=False,
         chat_room_id=chat_room_id,
-        # a_plan_id= a
-        # b_plan_id= b
+        recommend_plan=recommend_plans if recommend_plans else None
     )
 
     history.add_ai_message(result_state["final_answer"])
