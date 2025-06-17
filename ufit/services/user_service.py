@@ -4,7 +4,9 @@ from pymongo.database import Database
 from ufit.models.user import User
 from ufit.models.mobile_device import MobileDevice
 from ufit.models.usages import DataUsage, SmsUsage, CallUsage
+from ufit.models.rate_plan import RatePlan
 from ufit.dto.user_info import MobileDeviceDTO, UsageDTO, UserFullInfoDTO
+from bson import ObjectId
 
 
 def get_user_full_info(user_id: int, postgre_db: Session, mongo_db: Database ) -> UserFullInfoDTO:
@@ -21,13 +23,16 @@ def get_user_full_info(user_id: int, postgre_db: Session, mongo_db: Database ) -
         )
 
     # 2) MongoDB에서 해당 사용자의 요금제 조회
-    rate_plan = mongo_db.rate_plans.find_one({"_id": user.rate_plan_id})
-    if rate_plan is None:
+    raw_plan = mongo_db.rate_plans.find_one({"_id": ObjectId(user.rate_plan_id)})
+
+    if raw_plan is None:
         # 요금제가 없으면 404 에러 반환
         raise HTTPException(
             status_code=404,
             detail=f"Rate plan {user.rate_plan_id} not found."
         )
+    
+    rate_plan = RatePlan.model_validate(raw_plan)
 
     # 3) PostgreSQL에서 사용량과 디바이스 정보 조회
     call_usages = postgre_db.query(CallUsage).filter(CallUsage.user_id == user_id).all()
@@ -48,7 +53,7 @@ def get_user_full_info(user_id: int, postgre_db: Session, mongo_db: Database ) -
 
 def to_user_full_info_dto(
     user: User,
-    rate_plan: dict,
+    rate_plan: RatePlan,
     call_usages: list[CallUsage],
     data_usages: list[DataUsage],
     sms_usages: list[SmsUsage],

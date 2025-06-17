@@ -20,7 +20,7 @@ from langchain.prompts import (
 )
 from langchain.schema import AIMessage, HumanMessage
 
-from typing import Annotated, TypedDict, List, Dict
+from typing import Annotated, TypedDict, List, Dict, Any
 from langgraph.graph import StateGraph, START, END
 from langgraph.graph.message import add_messages
 from itertools import islice
