@@ -3,7 +3,7 @@ from dotenv import load_dotenv
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from pymongo import MongoClient
-from ufit.services.recommend_service import make_recommend
+from ufit.services.recommend_service import run_ufit_graph
 
 # .env 불러오기
 load_dotenv()
@@ -49,7 +49,7 @@ if __name__ == "__main__":
             print(f"\n🔹 테스트 케이스: {description}")
             print(f"💬 사용자 질문: {prompt}")
 
-            response = make_recommend(
+            response = run_ufit_graph(
                 user_id=TEST_USER_ID,
                 base_prompt=prompt,
                 chat_room_id=TEST_CHAT_ROOM_ID,
