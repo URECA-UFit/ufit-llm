@@ -47,3 +47,5 @@ langchain-community
 langchain-mongodb>=0.1.1
 mongomock
 langgraph
+ipython
+langchain_teddynote
