@@ -12,26 +12,16 @@ from ufit.exceptions import (
     VectorCreateException,
     VectorDeleteException,
 )
+from ufit.dto.rateplan_request import callRatePlanRequest
 
 from sqlalchemy import text, create_engine
 
 load_dotenv()
 
-MONGODB_URI = os.getenv("MONGODB_URI")
 DB_NAME = "ufit"
 COLLECTION_NAME = "rate_plans"
 PGVECTOR_CONNECTION_STRING = os.getenv("PGVECTOR_CONNECTIONS_STRING")
 COLLECTION_NAME_VECTOR = "langchain_pg_embedding"
-
-mongo_client = MongoClient(MONGODB_URI)
-collection = mongo_client[DB_NAME][COLLECTION_NAME]
-
-
-# 테스트 시 덮어쓰기용 함수
-def set_mongo_collection(mock_collection):
-    global collection
-    collection = mock_collection
-
 
 embedding_model = OpenAIEmbeddings(model="text-embedding-3-small")
 vectorstore = PGVector(
@@ -40,19 +30,35 @@ vectorstore = PGVector(
     collection_name=COLLECTION_NAME_VECTOR,
 )
 
-
-def embed_single_rateplan(rateplan_id: str):
-    plan = collection.find_one({"_id": ObjectId(rateplan_id)})
-    if not plan:
-        print(f"[요금제 임베딩 에러] 요금제 {rateplan_id}을(를) 찾을 수 없습니다.")
-        raise RatePlanNotFoundException()
+# 요금제 임베딩
+def embed_single_rateplan(request: callRatePlanRequest):
+    
+    plan_data = {
+        "rateplan_id": request.ratePlanId,
+        "plan_name": request.planName,
+        "summary": request.summary,
+        "monthly_fee": request.monthlyFee,
+        "discount_fee": request.discountFee,
+        "data_allowance": request.dataAllowance,
+        "voice_allowance": request.voiceAllowance,
+        "sms_allowance": request.smsAllowance,
+        "basic_benefit": request.basicBenefit,
+        "discount_benefit": request.discountBenefit,
+        "special_benefit": request.specialBenefit,
+        "device_type": request.deviceType,
+        "data_sharing": request.dataSharing,
+        "social_category": request.socialCategory,
+        "extra_data": request.extraData,
+        "data_category": request.dataCategory,
+    }
+    mongo_id = plan_data["rateplan_id"]
 
     try:
         doc = Document(
-            page_content=generate_final_output(plan),
+            page_content=generate_final_output(plan_data),
             metadata={
-                "mongo_id": str(plan["_id"]),
-                "plan_name": plan.get("plan_name", ""),
+                "mongo_id": mongo_id,
+                "plan_name": plan_data.get("plan_name", ""),
             },
         )
         vectorstore.add_documents([doc])

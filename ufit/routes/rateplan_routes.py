@@ -1,5 +1,7 @@
 from fastapi import APIRouter, Path
 from fastapi.responses import JSONResponse
+from pydantic import BaseModel
+from typing import Dict
 from ufit.services.embedding_service import (
     embed_single_rateplan,
     delete_rateplan_vector,
@@ -9,14 +11,17 @@ from ufit.exceptions import (
     VectorCreateException,
     VectorDeleteException,
 )
+from ufit.dto.rateplan_request import callRatePlanRequest
 
 rateplan_router = APIRouter()
 
-
 @rateplan_router.post("/api/admin/rateplans/{rateplan_id}")
-async def create_embedding_endpoint(rateplan_id: str = Path(...)):
+async def create_embedding_endpoint(
+    rateplan_id: str = Path(...),
+    request: callRatePlanRequest = ...
+):
     try:
-        embed_single_rateplan(rateplan_id)
+        embed_single_rateplan(request)
         return JSONResponse(
             status_code=201,
             content={
