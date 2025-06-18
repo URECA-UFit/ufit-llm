@@ -5,7 +5,7 @@ from bson import ObjectId
 
 
 class RatePlan(BaseModel):
-
+    
     plan_name: str
     summary: str
     monthly_fee: int
@@ -18,9 +18,6 @@ class RatePlan(BaseModel):
     discount_benefit: Optional[Dict[str, Any]] = None
     is_enabled: bool
     is_deleted: bool
-
-    created_at: datetime = Field(default_factory=timezone.utc, alias="createdAt")
-    updated_at: datetime = Field(default_factory=timezone.utc, alias="updatedAt")
 
     class Config:
         populate_by_name = True
