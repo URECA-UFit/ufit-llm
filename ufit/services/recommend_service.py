@@ -26,7 +26,8 @@ def run_ufit_graph(
         collection_name="message_histories",
     )
 
-    user_info = get_user_full_info(user_id, postgre_db, mongo_db)
+    if(user_id !=-1): user_info = get_user_full_info(user_id, postgre_db, mongo_db)
+    else: user_info = None
 
     initial_state: State = {
         "messages": history.messages,

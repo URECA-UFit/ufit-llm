@@ -15,26 +15,35 @@
 #                                 └─ if True ──> [respond_to_recommendation_intent_node] ──> [END]
 
 
-import json
+import os,json
 
 from ufit.services.user_service import stringify_user_full_info
 from ufit.dto.user_info import UserFullInfoDTO
 
-from langchain.schema import AIMessage
 
+from langchain_community.vectorstores import PGVector
+from langchain.schema import AIMessage
 from typing import Annotated, TypedDict
 from langgraph.graph import StateGraph, START, END
 from langgraph.graph.message import add_messages
 from ufit.dto.recommend import PlanDTO
 from langchain_teddynote.graphs import visualize_graph
-from ufit.llm.ai_model import get_anthropic_model
-from ufit.services.embedding import vectorstore
+from ufit.llm.ai_model import get_anthropic_model, embedding_model
 from ufit.llm.ufit_graph_prompt import (
     get_safe_query_prompt,
     get_rateplan_related_prompt,
     get_recommendation_intent_prompt,
     get_recommendation_prompt,
     get_non_recommendation_prompt
+)
+
+PGVECTOR_CONNECTIONS_STRING = os.getenv("PGVECTOR_CONNECTIONS_STRING")
+collection_name = "plans"
+
+vectorstore = PGVector(
+    embedding_function = embedding_model,
+    collection_name = collection_name,
+    connection_string = PGVECTOR_CONNECTIONS_STRING
 )
 
 num_of_recommend_plan = 2 
@@ -215,11 +224,13 @@ def respond_to_recommendation_intent_node(state: State):
 
     prompt = get_recommendation_prompt(user_text, plan_texts, state["rewriten_content"])
 
-    response = get_anthropic_model(temperature=0.4, max_token=512).invoke(prompt.to_messages())
+    response = get_anthropic_model(temperature=0.4, max_token=1000).invoke(prompt.to_messages())
+    print(plan_texts)
 
     a_plan = extract_plan_dto(docs[0], "A") if len(docs) > 0 else PlanDTO(planId="", name="")
     b_plan = extract_plan_dto(docs[1], "B") if len(docs) > 1 else PlanDTO(planId="", name="")
     
+
     # 8. 결과 반환
     return {
         "answer": response.content,
@@ -228,7 +239,6 @@ def respond_to_recommendation_intent_node(state: State):
         "messages": [AIMessage(content=response.content)],
     }
 
-    return
 
 
 graph_builder = StateGraph(State)
