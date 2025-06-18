@@ -5,7 +5,7 @@ from bson import ObjectId
 
 
 class RatePlan(BaseModel):
-    
+
     plan_name: str
     summary: str
     monthly_fee: int
