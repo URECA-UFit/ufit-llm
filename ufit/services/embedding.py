@@ -4,7 +4,7 @@ from dotenv import load_dotenv
 from langchain_openai import OpenAIEmbeddings
 from langchain_community.vectorstores import PGVector
 from langchain_core.documents import Document
-from formatter import generate_final_output
+from ufit.services.formatter import generate_final_output
 
 load_dotenv()
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
