@@ -59,11 +59,14 @@ def to_user_full_info_dto(
     sms_usages: list[SmsUsage],
     devices: list[MobileDevice],
 ) -> UserFullInfoDTO:
+    # Handle None gender case
+    gender_value = user.gender.value if user.gender else "unknown"
+    
     # UserFullInfoDTO를 만들어 FastAPI 응답 모델로 사용
     return UserFullInfoDTO(
         email=user.email,  
         age=user.age,      
-        gender=user.gender.value,  
+        gender=gender_value,  
         rate_plan=rate_plan, # MongoDB에서 온 요금제 데이터
         call_usages=[
             UsageDTO(usage_amount=u.usage_amount, usage_month=u.usage_month)
@@ -87,7 +90,12 @@ def to_user_full_info_dto(
 
 
 def stringify_user_full_info(user: UserFullInfoDTO) -> str:
-    gender_kor = {"male": "남성", "female": "여성"}.get(user.gender.lower(), user.gender)
+    if user is None:
+        return "사용자 정보가 없습니다."
+    
+    # Handle None gender case with default fallback
+    gender_value = user.gender if user.gender else "unknown"
+    gender_kor = {"male": "남성", "female": "여성", "MAN": "남성", "WOMAN": "여성"}.get(gender_value.lower(), "정보 없음")
 
     device_str = ", ".join([f"{d.device_name} ({d.data_type})" for d in user.devices]) or "없음"
     call_str = ", ".join([f"{u.usage_month.strftime('%Y-%m')}에 {u.usage_amount}분" for u in user.call_usages]) or "없음"

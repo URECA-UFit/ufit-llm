@@ -47,8 +47,8 @@ vectorstore = PGVector(
 )
 
 num_of_recommend_plan = 2 
-respond_to_unsafe_query = "죄송합니다. 해당 요청은 서비스 이용 정책에 따라 처리할 수 없습니다. \n 다른 질문을 해주세요."
-respond_to_unrelated_rateplan_query = "죄송합니다. 요금제와 관련없는 질문은 답변을 드릴 수가 업네요. \n 요금제와 관련된 질문을 해주세요."
+respond_to_unsafe_query = "죄송합니다. 해당 요청은 서비스 이용 정책에 따라 처리할 수 없습니다.\n다른 질문을 해주세요."
+respond_to_unrelated_rateplan_query = "죄송합니다. 요금제와 관련없는 질문은 답변을 드릴 수가 없네요.\n요금제와 관련된 질문을 해주세요."
 respond_to_non_recommendation_intent_if_llm_error= "요금제에 대해 궁금한 점이 있으신가요? 자세히 말씀해 주시면 추천도 도와드릴 수 있어요."
 
 
@@ -86,7 +86,7 @@ def is_safe_query_node(state: State):
 
 
 # 금칙어 질문에 응답 반환하는 노드(정적 대답)"""
-def respond_to_unsafe_query_node():
+def respond_to_unsafe_query_node(state: State):
     return {
         "answer": respond_to_unsafe_query,
         "messages": [AIMessage(content=respond_to_unsafe_query)]
@@ -214,7 +214,11 @@ def extract_plan_dto(doc, default_name):
 
 def respond_to_recommendation_intent_node(state: State):
     
-    user_text = stringify_user_full_info(state["user_info"])
+    # Handle case where user_info might be None
+    if state["user_info"] is None:
+        user_text = "사용자 정보가 없습니다."
+    else:
+        user_text = stringify_user_full_info(state["user_info"])
     #retriever_text = f"사용자 정보: {user_text}\n\n 질문: {state["rewriten_content"]}"
 
     docs = vectorstore.similarity_search(state["rewriten_content"], num_of_recommend_plan)
