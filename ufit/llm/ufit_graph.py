@@ -34,7 +34,8 @@ from ufit.llm.ufit_graph_prompt import (
     get_rateplan_related_prompt,
     get_recommendation_intent_prompt,
     get_recommendation_prompt,
-    get_non_recommendation_prompt
+    get_non_recommendation_prompt,
+    get_other_carrier_prompt
 )
 
 PGVECTOR_CONNECTIONS_STRING = os.getenv("PGVECTOR_CONNECTIONS_STRING")
@@ -47,8 +48,9 @@ vectorstore = PGVector(
 )
 
 num_of_recommend_plan = 2 
-respond_to_unsafe_query = "죄송합니다. 해당 요청은 서비스 이용 정책에 따라 처리할 수 없습니다. \n 다른 질문을 해주세요."
-respond_to_unrelated_rateplan_query = "죄송합니다. 요금제와 관련없는 질문은 답변을 드릴 수가 업네요. \n 요금제와 관련된 질문을 해주세요."
+respond_to_unsafe_query = "죄송합니다. 해당 요청은 서비스 이용 정책에 따라 처리할 수 없습니다.\n다른 질문을 해주세요."
+respond_to_unrelated_rateplan_query = "죄송합니다. 요금제와 관련없는 질문은 답변을 드릴 수가 없네요.\n요금제와 관련된 질문을 해주세요."
+respond_to_other_carrier_query = "죄송합니다. 저는 LG U+ 요금제에 한해 상담을 제공하고 있습니다.\n타 통신사 관련 문의는 답변드릴 수 없습니다."
 respond_to_non_recommendation_intent_if_llm_error= "요금제에 대해 궁금한 점이 있으신가요? 자세히 말씀해 주시면 추천도 도와드릴 수 있어요."
 
 
@@ -58,6 +60,7 @@ class State(TypedDict):
     content: str
     rewriten_content: str
     is_safe: bool
+    is_other_carrier: bool
     is_rateplan_related: bool
     is_recommendation_intent: bool
     user_info: UserFullInfoDTO
@@ -86,7 +89,7 @@ def is_safe_query_node(state: State):
 
 
 # 금칙어 질문에 응답 반환하는 노드(정적 대답)"""
-def respond_to_unsafe_query_node():
+def respond_to_unsafe_query_node(state: State):
     return {
         "answer": respond_to_unsafe_query,
         "messages": [AIMessage(content=respond_to_unsafe_query)]
@@ -214,7 +217,11 @@ def extract_plan_dto(doc, default_name):
 
 def respond_to_recommendation_intent_node(state: State):
     
-    user_text = stringify_user_full_info(state["user_info"])
+    # Handle case where user_info might be None
+    if state["user_info"] is None:
+        user_text = "사용자 정보가 없습니다."
+    else:
+        user_text = stringify_user_full_info(state["user_info"])
     #retriever_text = f"사용자 정보: {user_text}\n\n 질문: {state["rewriten_content"]}"
 
     docs = vectorstore.similarity_search(state["rewriten_content"], num_of_recommend_plan)
@@ -240,6 +247,29 @@ def respond_to_recommendation_intent_node(state: State):
     }
 
 
+# 타 통신사 질문인지 판단하는 노드
+def is_other_carrier_query_node(state: State):
+    content = state["rewriten_content"]
+
+    prompt = get_other_carrier_prompt(content)
+    response = get_anthropic_model(temperature=0.3, max_token=100).invoke(prompt.to_messages())
+
+    try:
+        result = json.loads(response.content)
+        is_other_carrier = result["is_other_carrier"]
+    except Exception:
+        is_other_carrier = False  # 파싱 실패 시 기본값
+
+    return {
+        "is_other_carrier": is_other_carrier
+    }
+
+# 타 통신사 질문에 응답 반환하는 노드(정적 대답)
+def respond_to_other_carrier_query_node(state: State):
+    return {
+        "answer": respond_to_other_carrier_query,
+        "messages": [AIMessage(content=respond_to_other_carrier_query)]
+    }
 
 graph_builder = StateGraph(State)
 
@@ -247,6 +277,8 @@ graph_builder = StateGraph(State)
 graph_builder.add_node("is_safe_query_node", is_safe_query_node)
 graph_builder.add_node("rewrite_query_node", rewrite_query_node)
 graph_builder.add_node("respond_to_unsafe_query_node", respond_to_unsafe_query_node)
+graph_builder.add_node("is_other_carrier_query_node", is_other_carrier_query_node)
+graph_builder.add_node("respond_to_other_carrier_query_node", respond_to_other_carrier_query_node)
 graph_builder.add_node("is_rateplan_related_query_node", is_rateplan_related_query_node)
 graph_builder.add_node("respond_to_unrelated_rateplan_query_node", respond_to_unrelated_rateplan_query_node)
 graph_builder.add_node("is_recommendation_intent_node", is_recommendation_intent_node)
@@ -259,10 +291,14 @@ def search_branch1(state: State):
     elif (state["is_safe"] == False): return "unsafe"
 
 def search_branch2(state: State):
+    if (state["is_other_carrier"] == True): return "other_carrier"
+    elif (state["is_other_carrier"] == False): return "lg_uplus"
+
+def search_branch3(state: State):
     if (state["is_rateplan_related"] == True): return "rateplan_related"
     elif (state["is_rateplan_related"] == False): return "rateplan_unrelated"
 
-def search_branch3(state: State):
+def search_branch4(state: State):
     if (state["is_recommendation_intent"] == True): return "recommendation_intent"
     elif (state["is_recommendation_intent"] == False): return "non_recommendation_intent"
 
@@ -278,11 +314,20 @@ graph_builder.add_conditional_edges(
     },
 )
 
-graph_builder.add_edge("rewrite_query_node", "is_rateplan_related_query_node")
+graph_builder.add_edge("rewrite_query_node", "is_other_carrier_query_node")
+
+graph_builder.add_conditional_edges(
+    "is_other_carrier_query_node",
+    search_branch2,
+    path_map = {
+        "other_carrier": "respond_to_other_carrier_query_node",
+        "lg_uplus": "is_rateplan_related_query_node"
+    },
+)
 
 graph_builder.add_conditional_edges(
     "is_rateplan_related_query_node",
-    search_branch2,
+    search_branch3,
     path_map = {
         "rateplan_unrelated": "respond_to_unrelated_rateplan_query_node",
         "rateplan_related": "is_recommendation_intent_node"
@@ -291,7 +336,7 @@ graph_builder.add_conditional_edges(
 
 graph_builder.add_conditional_edges(
     "is_recommendation_intent_node",
-    search_branch3,
+    search_branch4,
     path_map = {
         "non_recommendation_intent": "respond_to_non_recommendation_intent_node",
         "recommendation_intent": "respond_to_recommendation_intent_node"
@@ -299,6 +344,7 @@ graph_builder.add_conditional_edges(
 )
 
 graph_builder.add_edge("respond_to_unsafe_query_node", END)
+graph_builder.add_edge("respond_to_other_carrier_query_node", END)
 graph_builder.add_edge("respond_to_unrelated_rateplan_query_node", END)
 graph_builder.add_edge("respond_to_non_recommendation_intent_node", END)
 graph_builder.add_edge("respond_to_recommendation_intent_node", END)
