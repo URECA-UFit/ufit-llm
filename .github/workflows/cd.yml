@@ -67,6 +67,7 @@ jobs:
         key: ${{ secrets.EC2_KEY }}
         port: 22
         script: |
+          echo "${{ secrets.ENV_FILE_CONTENTS }}" > $EC2_DIR/.env
           docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_HUB_TOKEN }}
           cd /home/ubuntu/ufit
           docker-compose down --volumes --remove-orphans
