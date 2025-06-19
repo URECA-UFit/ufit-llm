@@ -38,7 +38,7 @@ def get_db() -> Session: # type: ignore
 
 # MongoDB 기본 설정
 
-MONGO_URL = os.getenv("MONGO_URL")
+MONGO_URL = os.getenv("MONGO_URI")
 
 # 싱글톤 클라이언트 관리
 @lru_cache()
