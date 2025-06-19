@@ -45,10 +45,10 @@ jobs:
     - name: Checkout 코드
       uses: actions/checkout@v4
 
-    - name: Python 3.13 설정
+    - name: Python 3.11 설정
       uses: actions/setup-python@v5
       with:
-        python-version: "3.13"
+        python-version: "3.11"
 
     - name: Set up .env
       run: |
