@@ -1,0 +1,1410 @@
+[
+  {
+    "plan_name": "태블릿/스마트기기 데이터 걱정 없는 25GB",
+    "monthly_fee": 65890,
+    "discount_fee": 49418,
+    "data_allowance": "매달 25GB를 다 쓰면 매일 2GB를 더 쓸 수 있고, 일 2GB도 다 쓰면 내 최대 3Mbps 속도로 데이터를 무제한 이용가능",
+    "summary": "고객의 데이터 사용 패턴에 맞춰 요금제를 선택하는 LTE 요금제",
+    "device_type": "LTE 전용 태블릿, 빔, 액션캠 등 스마트기기",
+    "data_sharing": "불가능",
+    "social_category": "all",
+    "_id": "6853756e42e369721418e84f"
+  },
+  {
+    "plan_name": "5G 태블릿 6GB+데이터 나눠쓰기",
+    "monthly_fee": 33000,
+    "discount_fee": 24750,
+    "data_allowance": "6GB",
+    "summary": "5G 데이터 기본 제공량을 모두 사용하면 휴대폰 요금제의 데이터 제공량을 나눠 쓸 수 있는 5G 요금제",
+    "device_type": "LTE 전용 태블릿, 빔, 액션캠 등 스마트기기",
+    "data_sharing": "가능",
+    "social_category": "all",
+    "_id": "6853756e42e369721418e850"
+  },
+  {
+    "plan_name": "태블릿/스마트기기 데이터 20GB",
+    "monthly_fee": 24750,
+    "discount_fee": 18563,
+    "data_allowance": "20GB",
+    "summary": "고객의 데이터 사용 패턴에 맞춰 요금제를 선택하는 LTE 요금제",
+    "device_type": "LTE 전용 태블릿, 빔, 액션캠 등 스마트기기",
+    "data_sharing": "불가능",
+    "social_category": "all",
+    "_id": "6853756e42e369721418e851"
+  },
+  {
+    "plan_name": "5G 태블릿 4GB+데이터 나눠쓰기",
+    "monthly_fee": 22000,
+    "discount_fee": 16500,
+    "data_allowance": "4GB",
+    "summary": "5G 데이터 기본 제공량을 모두 사용하면 휴대폰 요금제의 데이터 제공량을 나눠 쓸 수 있는 5G 요금제",
+    "device_type": "LTE 전용 태블릿, 빔, 액션캠 등 스마트기기",
+    "data_sharing": "가능",
+    "social_category": "all",
+    "_id": "6853756e42e369721418e852"
+  },
+  {
+    "plan_name": "태블릿/스마트기기 3GB + 데이터 나눠쓰기",
+    "monthly_fee": 16500,
+    "discount_fee": 12375,
+    "data_allowance": "3GB",
+    "summary": "데이터 기본제공량을 모두 사용하면 휴대폰 요금제의 월, 일 데이터 제공량을 나눠 쓸 수 있는 LTE 요금제",
+    "device_type": "LTE 전용 태블릿, 빔, 액션캠 등 스마트기기",
+    "data_sharing": "가능",
+    "social_category": "all",
+    "_id": "6853756e42e369721418e853"
+  },
+  {
+    "plan_name": "태블릿/스마트기기 데이터 10GB",
+    "monthly_fee": 16500,
+    "discount_fee": 12375,
+    "data_allowance": "10GB",
+    "summary": "고객의 데이터 사용 패턴에 맞춰 요금제를 선택하는 LTE 요금제",
+    "device_type": "LTE 전용 태블릿, 빔, 액션캠 등 스마트기기",
+    "data_sharing": "불가능",
+    "social_category": "all",
+    "_id": "6853756e42e369721418e854"
+  },
+  {
+    "plan_name": "LTE Wearable",
+    "monthly_fee": 11000,
+    "discount_fee": 8250,
+    "data_allowance": "250MB",
+    "voice_allowance": "50분",
+    "sms_allowance": "250건",
+    "summary": "스마트워치에서 LTE폰의 음성통화, 메시지, 데이터를 함께 쓸 수 있는 LTE 요금제",
+    "basic_benefit": {
+      "basicBenefit": "원넘버(워치에서도 휴대폰과 같은 번호를 사용 할 수 있는 서비스)"
+    },
+    "device_type": "스마트워치",
+    "data_sharing": "불가능",
+    "social_category": "all",
+    "_id": "6853756e42e369721418e855"
+  },
+  {
+    "plan_name": "태블릿/스마트기기 500MB + 데이터 나눠쓰기",
+    "monthly_fee": 11000,
+    "discount_fee": 8250,
+    "data_allowance": "500MB",
+    "summary": "데이터 기본제공량을 모두 사용하면 휴대폰 요금제의 월, 일 데이터 제공량을 나눠 쓸 수 있는 LTE 요금제",
+    "device_type": "LTE 전용 태블릿, 빔, 액션캠 등 스마트기기",
+    "data_sharing": "가능",
+    "social_category": "all",
+    "_id": "6853756e42e369721418e856"
+  },
+  {
+    "plan_name": "LTE Wearable KIDS",
+    "monthly_fee": 8800,
+    "discount_fee": 6600,
+    "data_allowance": "200MB",
+    "voice_allowance": "50분",
+    "sms_allowance": "기본제공",
+    "summary": "키즈 워치에서 휴대폰의 음성통화, 문자메시지, 데이터를 함께 쓸 수 있는 LTE 요금제",
+    "basic_benefit": {
+      "basicBenefit": "원넘버(워치에서도 휴대폰과 같은 번호를 사용 할 수 있는 서비스)"
+    },
+    "device_type": "키즈워치",
+    "data_sharing": "불가능",
+    "social_category": "kids",
+    "_id": "6853756e42e369721418e857"
+  },
+  {
+    "plan_name": "너겟 69",
+    "monthly_fee": 69000,
+    "discount_fee": 51750,
+    "data_allowance": "무제한",
+    "data_category": "web, kkaotalk, music, video, game",
+    "voice_allowance": "집/이동전화 무제한 + 부가통화 300분",
+    "sms_allowance": "기본제공",
+    "summary": "오직 U⁺에서만 가입 가능한 속도 제한 없는 5G 데이터 무제한 온라인 전용 요금제",
+    "discount_benefit": {
+      "discountBenefit": "태블릿/스마트기기 월정액 할인(태블릿/워치 등 휴대폰을 제외한 내 명의 스마트기기 2대 월정액을 1대당 최대 11,000원 할인) / 로밍 혜택 프로모션(5G 월정액 85,000원 이상 또는 너겟 59 이상 요금제를 사용하시면 로밍패스 요금제 가입 시 로밍 패스 요금제 기본 데이터가 2배)"
+    },
+    "special_benefit": {
+      "specialBenefit": "프리미엄 서비스 기본 제공(택1) : 삼성팩, 애플디바이스팩, 디즈니 + 티빙 / 미디어 서비스 기본 제공 (택1) : 아이들나라 스탠다드+러닝, 바이브 앱 음악감상, 유플레이"
+    },
+    "device_type": "5G 스마트폰",
+    "data_sharing": "가능(테더링+쉐어링 100GB)",
+    "social_category": "all",
+    "_id": "6853756e42e369721418e858"
+  },
+  {
+    "plan_name": "너겟 65",
+    "monthly_fee": 65000,
+    "discount_fee": 48750,
+    "data_allowance": "무제한",
+    "data_category": "web, kkaotalk, music, video, game",
+    "voice_allowance": "집/이동전화 무제한 + 부가통화 300분",
+    "sms_allowance": "기본제공",
+    "summary": "오직 U⁺에서만 가입 가능한 속도 제한 없는 5G 데이터 무제한 온라인 전용 요금제",
+    "discount_benefit": {
+      "discountBenefit": "스마트기기 1대 월정액 할인(최대 11000원 할인)"
+    },
+    "device_type": "5G 스마트폰",
+    "data_sharing": "가능(테더링+쉐어링 80GB)",
+    "social_category": "all",
+    "_id": "6853756e42e369721418e859"
+  },
+  {
+    "plan_name": "너겟 59",
+    "monthly_fee": 59000,
+    "discount_fee": 44250,
+    "data_allowance": "무제한",
+    "data_category": "web, kkaotalk, music, video, game",
+    "voice_allowance": "집/이동전화 무제한 + 부가통화 300분",
+    "sms_allowance": "기본제공",
+    "summary": "오직 U⁺에서만 가입 가능한 속도 제한 없는 5G 데이터 무제한 온라인 전용 요금제",
+    "special_benefit": {
+      "specialBenefit": "프리미엄 서비스 기본 제공(택1) : 삼성팩, 애플디바이스팩, 멀티팩(아이들나라 스탠다드+러닝, 바이브 음악감상, 지니뮤직 음악감상, 밀리의 서재 중 1개 선택)"
+    },
+    "device_type": "5G 스마트폰",
+    "data_sharing": "가능(테더링+쉐어링 70GB)",
+    "social_category": "all",
+    "_id": "6853756e42e369721418e85a"
+  },
+  {
+    "plan_name": "너겟 51",
+    "monthly_fee": 51000,
+    "discount_fee": 38250,
+    "data_allowance": "150GB",
+    "extra_data": "다 쓰면 최대 5Mbps (빠른 데이터)",
+    "data_category": "web, kkaotalk, music, video, game",
+    "voice_allowance": "집/이동전화 무제한 + 부가통화 300분",
+    "sms_allowance": "기본제공",
+    "summary": "오직 U⁺에서만 약정 없이 가입할 수 있는 5G 온라인 전용 요금제",
+    "discount_benefit": {
+      "discountBenefit": "피싱/해킹 안심서비스 무료 이용 프로모션"
+    },
+    "device_type": "5G 스마트폰",
+    "data_sharing": "가능(테더링+쉐어링 월 데이터 기본 제공량 안에서 65GB)",
+    "social_category": "all",
+    "_id": "6853756e42e369721418e85b"
+  },
+  {
+    "plan_name": "너겟 47",
+    "monthly_fee": 47000,
+    "discount_fee": 35250,
+    "data_allowance": "100GB",
+    "extra_data": "다 쓰면 최대 3Mbps (빠른 데이터)",
+    "data_category": "web, kkaotalk, music, video, game",
+    "voice_allowance": "집/이동전화 무제한 + 부가통화 300분",
+    "sms_allowance": "기본제공",
+    "summary": "오직 U⁺에서만 약정 없이 가입할 수 있는 5G 온라인 전용 요금제",
+    "discount_benefit": {
+      "discountBenefit": "피싱/해킹 안심서비스 무료 이용 프로모션"
+    },
+    "device_type": "5G 스마트폰",
+    "data_sharing": "가능(테더링+쉐어링 월 데이터 기본 제공량 안에서 60GB)",
+    "social_category": "all",
+    "_id": "6853756e42e369721418e85c"
+  },
+  {
+    "plan_name": "너겟 46",
+    "monthly_fee": 46000,
+    "discount_fee": 34500,
+    "data_allowance": "80GB",
+    "extra_data": "다 쓰면 최대 3Mbps (빠른 데이터)",
+    "data_category": "web, kkaotalk, music, video, game",
+    "voice_allowance": "집/이동전화 무제한 + 부가통화 300분",
+    "sms_allowance": "기본제공",
+    "summary": "오직 U⁺에서만 약정 없이 가입할 수 있는 5G 온라인 전용 요금제",
+    "discount_benefit": {
+      "discountBenefit": "피싱/해킹 안심서비스 무료 이용 프로모션"
+    },
+    "device_type": "5G 스마트폰",
+    "data_sharing": "가능(테더링+쉐어링 월 데이터 기본 제공량 안에서 55GB)",
+    "social_category": "all",
+    "_id": "6853756e42e369721418e85d"
+  },
+  {
+    "plan_name": "너겟 45",
+    "monthly_fee": 45000,
+    "discount_fee": 33750,
+    "data_allowance": "50GB",
+    "extra_data": "다 쓰면 최대 1Mbps (느린 데이터)",
+    "data_category": "web, kkaotalk, music",
+    "voice_allowance": "집/이동전화 무제한 + 부가통화 300분",
+    "sms_allowance": "기본제공",
+    "summary": "오직 U⁺에서만 약정 없이 가입할 수 있는 5G 온라인 전용 요금제",
+    "discount_benefit": {
+      "discountBenefit": "피싱/해킹 안심서비스 무료 이용 프로모션"
+    },
+    "device_type": "5G 스마트폰",
+    "data_sharing": "가능(테더링+쉐어링 월 데이터 기본 제공량 안에서 사용 가능)",
+    "social_category": "all",
+    "_id": "6853756e42e369721418e85e"
+  },
+  {
+    "plan_name": "너겟 44",
+    "monthly_fee": 44000,
+    "discount_fee": 33000,
+    "data_allowance": "41GB",
+    "extra_data": "다 쓰면 최대 1Mbps (느린 데이터)",
+    "data_category": "web, kkaotalk, music",
+    "voice_allowance": "집/이동전화 무제한 + 부가통화 300분",
+    "sms_allowance": "기본제공",
+    "summary": "오직 U⁺에서만 약정 없이 가입할 수 있는 5G 온라인 전용 요금제",
+    "discount_benefit": {
+      "discountBenefit": "피싱/해킹 안심서비스 무료 이용 프로모션"
+    },
+    "device_type": "5G 스마트폰",
+    "data_sharing": "가능(월 데이터 기본 제공량 안에서 사용 가능)",
+    "social_category": "all",
+    "_id": "6853756e42e369721418e85f"
+  },
+  {
+    "plan_name": "너겟 43",
+    "monthly_fee": 43000,
+    "discount_fee": 32250,
+    "data_allowance": "38GB",
+    "extra_data": "다 쓰면 최대 1Mbps (느린 데이터)",
+    "data_category": "web, kkaotalk, music",
+    "voice_allowance": "집/이동전화 무제한 + 부가통화 300분",
+    "sms_allowance": "기본제공",
+    "summary": "오직 U⁺에서만 약정 없이 가입할 수 있는 5G 온라인 전용 요금제",
+    "discount_benefit": {
+      "discountBenefit": "피싱/해킹 안심서비스 무료 이용 프로모션"
+    },
+    "device_type": "5G 스마트폰",
+    "data_sharing": "가능(월 데이터 기본 제공량 안에서 사용 가능)",
+    "social_category": "all",
+    "_id": "6853756e42e369721418e860"
+  },
+  {
+    "plan_name": "너겟 42",
+    "monthly_fee": 42000,
+    "discount_fee": 31500,
+    "data_allowance": "36GB",
+    "extra_data": "다 쓰면 최대 1Mbps (느린 데이터)",
+    "data_category": "web, kkaotalk, music",
+    "voice_allowance": "집/이동전화 무제한 + 부가통화 300분",
+    "sms_allowance": "기본제공",
+    "summary": "오직 U⁺에서만 약정 없이 가입할 수 있는 5G 온라인 전용 요금제",
+    "discount_benefit": {
+      "discountBenefit": "피싱/해킹 안심서비스 무료 이용 프로모션"
+    },
+    "device_type": "5G 스마트폰",
+    "data_sharing": "가능(월 데이터 기본 제공량 안에서 사용 가능)",
+    "social_category": "all",
+    "_id": "6853756e42e369721418e861"
+  },
+  {
+    "plan_name": "너겟 41",
+    "monthly_fee": 41000,
+    "discount_fee": 30750,
+    "data_allowance": "33GB",
+    "extra_data": "다 쓰면 최대 1Mbps (느린 데이터)",
+    "data_category": "web, kkaotalk, music",
+    "voice_allowance": "집/이동전화 무제한 + 부가통화 300분",
+    "sms_allowance": "기본제공",
+    "summary": "오직 U⁺에서만 약정 없이 가입할 수 있는 5G 온라인 전용 요금제",
+    "discount_benefit": {
+      "discountBenefit": "피싱/해킹 안심서비스 무료 이용 프로모션"
+    },
+    "device_type": "5G 스마트폰",
+    "data_sharing": "가능(월 데이터 기본 제공량 안에서 사용 가능)",
+    "social_category": "all",
+    "_id": "6853756e42e369721418e862"
+  },
+  {
+    "plan_name": "너겟 40",
+    "monthly_fee": 40000,
+    "discount_fee": 30000,
+    "data_allowance": "31GB",
+    "extra_data": "다 쓰면 최대 1Mbps (느린 데이터)",
+    "data_category": "web, kkaotalk, music",
+    "voice_allowance": "집/이동전화 무제한 + 부가통화 300분",
+    "sms_allowance": "기본제공",
+    "summary": "오직 U⁺에서만 약정 없이 가입할 수 있는 5G 온라인 전용 요금제",
+    "discount_benefit": {
+      "discountBenefit": "피싱/해킹 안심서비스 무료 이용 프로모션"
+    },
+    "device_type": "5G 스마트폰",
+    "data_sharing": "가능(월 데이터 기본 제공량 안에서 사용 가능)",
+    "social_category": "all",
+    "_id": "6853756e42e369721418e863"
+  },
+  {
+    "plan_name": "너겟 39",
+    "monthly_fee": 39000,
+    "discount_fee": 29250,
+    "data_allowance": "27GB",
+    "extra_data": "다 쓰면 최대 1Mbps (느린 데이터)",
+    "data_category": "web, kkaotalk, music",
+    "voice_allowance": "집/이동전화 무제한 + 부가통화 300분",
+    "sms_allowance": "기본제공",
+    "summary": "오직 U⁺에서만 약정 없이 가입할 수 있는 5G 온라인 전용 요금제",
+    "discount_benefit": {
+      "discountBenefit": "피싱/해킹 안심서비스 무료 이용 프로모션"
+    },
+    "device_type": "5G 스마트폰",
+    "data_sharing": "가능(월 데이터 기본 제공량 안에서 사용 가능)",
+    "social_category": "all",
+    "_id": "6853756e42e369721418e864"
+  },
+  {
+    "plan_name": "너겟 38",
+    "monthly_fee": 38000,
+    "discount_fee": 28500,
+    "data_allowance": "25GB",
+    "extra_data": "다 쓰면 최대 1Mbps (느린 데이터)",
+    "data_category": "web, kkaotalk, music",
+    "voice_allowance": "집/이동전화 무제한 + 부가통화 300분",
+    "sms_allowance": "기본제공",
+    "summary": "오직 U⁺에서만 약정 없이 가입할 수 있는 5G 온라인 전용 요금제",
+    "discount_benefit": {
+      "discountBenefit": "피싱/해킹 안심서비스 무료 이용 프로모션"
+    },
+    "device_type": "5G 스마트폰",
+    "data_sharing": "가능(월 데이터 기본 제공량 안에서 사용 가능)",
+    "social_category": "all",
+    "_id": "6853756e42e369721418e865"
+  },
+  {
+    "plan_name": "너겟 37",
+    "monthly_fee": 37000,
+    "discount_fee": 27750,
+    "data_allowance": "22GB",
+    "extra_data": "다 쓰면 최대 1Mbps (느린 데이터)",
+    "data_category": "web, kkaotalk, music",
+    "voice_allowance": "집/이동전화 무제한 + 부가통화 300분",
+    "sms_allowance": "기본제공",
+    "summary": "오직 U⁺에서만 약정 없이 가입할 수 있는 5G 온라인 전용 요금제",
+    "discount_benefit": {
+      "discountBenefit": "피싱/해킹 안심서비스 무료 이용 프로모션"
+    },
+    "device_type": "5G 스마트폰",
+    "data_sharing": "가능(월 데이터 기본 제공량 안에서 사용 가능)",
+    "social_category": "all",
+    "_id": "6853756e42e369721418e866"
+  },
+  {
+    "plan_name": "너겟 36",
+    "monthly_fee": 36000,
+    "discount_fee": 27000,
+    "data_allowance": "20GB",
+    "extra_data": "다 쓰면 최대 1Mbps (느린 데이터)",
+    "data_category": "web, kkaotalk, music",
+    "voice_allowance": "집/이동전화 무제한 + 부가통화 300분",
+    "sms_allowance": "기본제공",
+    "summary": "오직 U⁺에서만 약정 없이 가입할 수 있는 5G 온라인 전용 요금제",
+    "discount_benefit": {
+      "discountBenefit": "피싱/해킹 안심서비스 무료 이용 프로모션"
+    },
+    "device_type": "5G 스마트폰",
+    "data_sharing": "가능(월 데이터 기본 제공량 안에서 사용 가능)",
+    "social_category": "all",
+    "_id": "6853756e42e369721418e867"
+  },
+  {
+    "plan_name": "너겟 35",
+    "monthly_fee": 35000,
+    "discount_fee": 26250,
+    "data_allowance": "17GB",
+    "extra_data": "다 쓰면 최대 1Mbps (느린 데이터)",
+    "data_category": "web, kkaotalk, music",
+    "voice_allowance": "집/이동전화 무제한 + 부가통화 300분",
+    "sms_allowance": "기본제공",
+    "summary": "오직 U⁺에서만 약정 없이 가입할 수 있는 5G 온라인 전용 요금제",
+    "discount_benefit": {
+      "discountBenefit": "피싱/해킹 안심서비스 무료 이용 프로모션"
+    },
+    "device_type": "5G 스마트폰",
+    "data_sharing": "가능(월 데이터 기본 제공량 안에서 사용 가능)",
+    "social_category": "all",
+    "_id": "6853756e42e369721418e868"
+  },
+  {
+    "plan_name": "너겟 34",
+    "monthly_fee": 34000,
+    "discount_fee": 25500,
+    "data_allowance": "15GB",
+    "extra_data": "다 쓰면 최대 400Kbps (매우 느린 데이터)",
+    "data_category": "web, kkaotalk, music",
+    "voice_allowance": "집/이동전화 무제한 + 부가통화 300분",
+    "sms_allowance": "기본제공",
+    "summary": "오직 U⁺에서만 약정 없이 가입할 수 있는 5G 온라인 전용 요금제",
+    "discount_benefit": {
+      "discountBenefit": "피싱/해킹 안심서비스 무료 이용 프로모션"
+    },
+    "device_type": "5G 스마트폰",
+    "data_sharing": "가능(월 데이터 기본 제공량 안에서 사용 가능)",
+    "social_category": "all",
+    "_id": "6853756e42e369721418e869"
+  },
+  {
+    "plan_name": "너겟 33",
+    "monthly_fee": 33000,
+    "discount_fee": 24750,
+    "data_allowance": "12GB",
+    "extra_data": "다 쓰면 최대 400Kbps (매우 느린 데이터)",
+    "data_category": "web, kkaotalk, music",
+    "voice_allowance": "집/이동전화 무제한 + 부가통화 300분",
+    "sms_allowance": "기본제공",
+    "summary": "오직 U⁺에서만 약정 없이 가입할 수 있는 5G 온라인 전용 요금제",
+    "discount_benefit": {
+      "discountBenefit": "피싱/해킹 안심서비스 무료 이용 프로모션"
+    },
+    "device_type": "5G 스마트폰",
+    "data_sharing": "가능(월 데이터 기본 제공량 안에서 사용 가능)",
+    "social_category": "all",
+    "_id": "6853756e42e369721418e86a"
+  },
+  {
+    "plan_name": "너겟 32",
+    "monthly_fee": 32000,
+    "discount_fee": 24000,
+    "data_allowance": "10GB",
+    "extra_data": "다 쓰면 최대 400Kbps (매우 느린 데이터)",
+    "data_category": "web, kkaotalk",
+    "voice_allowance": "집/이동전화 무제한 + 부가통화 300분",
+    "sms_allowance": "기본제공",
+    "summary": "오직 U⁺에서만 약정 없이 가입할 수 있는 5G 온라인 전용 요금제",
+    "discount_benefit": {
+      "discountBenefit": "피싱/해킹 안심서비스 무료 이용 프로모션"
+    },
+    "device_type": "5G 스마트폰",
+    "data_sharing": "가능(월 데이터 기본 제공량 안에서 사용 가능)",
+    "social_category": "all",
+    "_id": "6853756e42e369721418e86b"
+  },
+  {
+    "plan_name": "너겟 31",
+    "monthly_fee": 31000,
+    "discount_fee": 23250,
+    "data_allowance": "8GB",
+    "extra_data": "다 쓰면 최대 400Kbps (매우 느린 데이터)",
+    "data_category": "web, kkaotalk",
+    "voice_allowance": "집/이동전화 무제한 + 부가통화 300분",
+    "sms_allowance": "기본제공",
+    "summary": "오직 U⁺에서만 약정 없이 가입할 수 있는 5G 온라인 전용 요금제",
+    "discount_benefit": {
+      "discountBenefit": "피싱/해킹 안심서비스 무료 이용 프로모션"
+    },
+    "device_type": "5G 스마트폰",
+    "data_sharing": "가능(월 데이터 기본 제공량 안에서 사용 가능)",
+    "social_category": "all",
+    "_id": "6853756e42e369721418e86c"
+  },
+  {
+    "plan_name": "너겟 30",
+    "monthly_fee": 30000,
+    "discount_fee": 22500,
+    "data_allowance": "7GB",
+    "extra_data": "다 쓰면 최대 400Kbps (매우 느린 데이터)",
+    "data_category": "web, kkaotalk",
+    "voice_allowance": "집/이동전화 무제한 + 부가통화 100분",
+    "sms_allowance": "기본제공",
+    "summary": "오직 U⁺에서만 약정 없이 가입할 수 있는 5G 온라인 전용 요금제",
+    "discount_benefit": {
+      "discountBenefit": "피싱/해킹 안심서비스 무료 이용 프로모션"
+    },
+    "device_type": "5G 스마트폰",
+    "data_sharing": "가능(월 데이터 기본 제공량 안에서 사용 가능)",
+    "social_category": "all",
+    "_id": "6853756e42e369721418e86d"
+  },
+  {
+    "plan_name": "너겟 26",
+    "monthly_fee": 26000,
+    "data_allowance": "6GB",
+    "extra_data": "다 쓰면 최대 400Kbps (매우 느린 데이터)",
+    "data_category": "web, kkaotalk",
+    "voice_allowance": "집/이동전화 무제한 + 부가통화 300분",
+    "sms_allowance": "기본제공",
+    "summary": "오직 U⁺에서만 약정 없이 가입할 수 있는 5G 온라인 전용 요금제",
+    "discount_benefit": {
+      "discountBenefit": "피싱/해킹 안심서비스 무료 이용 프로모션"
+    },
+    "is_enabled": true,
+    "is_deleted": false,
+    "_id": "6853756e42e369721418e86e"
+  },
+  {
+    "plan_name": "LTE 다이렉트 22",
+    "monthly_fee": 22000,
+    "discount_fee": 20000,
+    "data_allowance": "1.8GB",
+    "voice_allowance": "집/이동전화 무제한 + 부가통화 100분",
+    "sms_allowance": "기본제공",
+    "summary": "오직 U⁺에서만 약정 없이 가입할 수 있는 5G 온라인 전용 요금제",
+    "device_type": "5G 스마트폰",
+    "data_sharing": "불가능",
+    "social_category": "all",
+    "_id": "6853756e42e369721418e86f"
+  },
+  {
+    "plan_name": "LTE 다이렉트 45",
+    "monthly_fee": 45000,
+    "discount_fee": 32000,
+    "data_allowance": "매일 5GB",
+    "extra_data": "다 쓰면 최대 5Mbps (빠른 데이터)",
+    "data_category": "web, kakaotalk, music, video, game",
+    "voice_allowance": "집/이동전화 무제한 + 부가통화 100분",
+    "sms_allowance": "기본제공",
+    "summary": "오직 U⁺에서만 약정 없이 가입할 수 있는 5G 온라인 전용 요금제",
+    "discount_benefit": {
+      "discountBenefit": "참 쉬운 가족 결합(U+휴대폰과 U+인터넷을 결합하면 결합 휴대폰 대수에 따라 월 6,600원을 추가할인 받을 수 있습니다.)"
+    },
+    "device_type": "5G 스마트폰",
+    "data_sharing": "불가능",
+    "social_category": "all",
+    "_id": "6853756e42e369721418e870"
+  },
+  {
+    "plan_name": "5G 프리미어 에센셜",
+    "monthly_fee": 85000,
+    "discount_fee": 58500,
+    "data_allowance": "무제한",
+    "data_category": "web, kakaotalk, music, video, game",
+    "voice_allowance": "집 / 이동전화 무제한 (+부가통화 30분)",
+    "sms_allowance": "기본제공",
+    "summary": "U⁺5G 서비스를 마음껏 즐길 수 있는 5G 요금제",
+    "basic_benefit": {
+      "basicBenefit": "U+ 모바일 TV 기본 월정액 무료 / U+멤버십 VIP 등급 혜택"
+    },
+    "discount_benefit": {
+      "discountBenefit": "U+투게더 결합 (U+ 휴대폰을 쓰는 친구, 가족과 결합하면 데이터 무제한 요금제를 최대 20,000원(4-5인 결합시) 저렴하게 이용 가능) / 프리미어 요금제 약정 할인 (약정 기간 24개월 동안 통신요금 매달 5,250원 추가 할인) / 로밍 혜택 프로모션 (5G 월정액 85,000원 이상 요금제를 사용할 시 로밍패스 요금제 가입 시 로밍 패스 요금제 기본 데이터 2배)"
+    },
+    "device_type": "5G 스마트폰",
+    "data_sharing": "가능(테더링 + 쉐어링 70GB)",
+    "social_category": "all",
+    "_id": "6853756e42e369721418e871"
+  },
+  {
+    "plan_name": "5G 스탠다드",
+    "monthly_fee": 75000,
+    "discount_fee": 56250,
+    "data_allowance": "150 GB",
+    "extra_data": "다 쓰면 최대 5Mbps (빠른 데이터)",
+    "data_category": "web, kakaotalk, music, video, game",
+    "voice_allowance": "집 / 이동전화 무제한 (+부가통화 300분)",
+    "sms_allowance": "기본제공",
+    "summary": "넉넉한 데이터로 U⁺5G 서비스를 이용할 수 있는 5G 표준 요금제",
+    "basic_benefit": {
+      "basicBenefit": "U+ 모바일 TV 기본 월정액 무료 / U+멤버십 VIP 등급 혜택"
+    },
+    "device_type": "5G 스마트폰",
+    "data_sharing": "가능(테더링 + 쉐어링 70GB)",
+    "social_category": "all",
+    "_id": "6853756e42e369721418e872"
+  },
+  {
+    "plan_name": "5G 심플+",
+    "monthly_fee": 61000,
+    "discount_fee": 45750,
+    "data_allowance": "31 GB",
+    "extra_data": "다 쓰면 최대 1Mbps (느린 데이터)",
+    "data_category": "web, kakaotalk, music",
+    "voice_allowance": "집 / 이동전화 무제한 (+부가통화 300분)",
+    "sms_allowance": "기본제공",
+    "summary": "합리적인 요금으로 U+5G 서비스를 이용할 수 있는 5G 요금제",
+    "basic_benefit": {
+      "basicBenefit": "U+ 모바일 TV 기본 월정액 무료"
+    },
+    "device_type": "5G 스마트폰",
+    "data_sharing": "가능(테더링 + 쉐어링 10GB)",
+    "social_category": "all",
+    "_id": "6853756e42e369721418e873"
+  },
+  {
+    "plan_name": "5G 프리미어 레귤러",
+    "monthly_fee": 95000,
+    "discount_fee": 66000,
+    "data_allowance": "무제한",
+    "data_category": "web, kakaotalk, music, video, game",
+    "voice_allowance": "집 / 이동전화 무제한 (+부가통화 300분)",
+    "sms_allowance": "기본제공",
+    "summary": "U⁺5G 서비스는 물론, 스마트기기 1개와 다양한 콘텐츠까지 마음껏 이용할 수 있는 5G 요금제",
+    "basic_benefit": {
+      "basicBenefit": "U+ 모바일 TV 기본 월정액 무료 / U+멤버십 VVIP 등급 혜택"
+    },
+    "discount_benefit": {
+      "discountBenefit": "U+투게더 결합 (U+ 휴대폰을 쓰는 친구, 가족과 결합하면 데이터 무제한 요금제를 최대 20,000원(4-5인 결합시) 저렴하게 이용 가능) / 스마트기기 (1대 월정액 할인 - 1대당 최대 11,000원) / 프리미어 요금제 약정 할인 (약정 기간 24개월 동안 통신요금 매달 5,250원 추가 할인) / 로밍 혜택 프로모션 (5G 월정액 85,000원 이상 요금제를 사용할 시 로밍패스 요금제 가입 시 로밍 패스 요금제 기본 데이터 2배)"
+    },
+    "special_benefit": {
+      "specialBenefit": "미디어 서비스 기본 제공 (택1) : 아이들나라 스탠다드+러닝, 바이브 앱 음악감상, 유플레이"
+    },
+    "device_type": "5G 스마트폰",
+    "data_sharing": "가능(월 데이터 기본 제공량 안에서 80GB)",
+    "social_category": "all",
+    "_id": "6853756e42e369721418e874"
+  },
+  {
+    "plan_name": "유쓰 5G 스탠다드",
+    "monthly_fee": 75000,
+    "discount_fee": 56250,
+    "data_allowance": "210 GB",
+    "data_category": "web, kakaotalk, music, video, game",
+    "voice_allowance": "집 / 이동전화 무제한 (+부가통화 300분)",
+    "extra_data": "다 쓰면 최대 5Mbps (빠른 데이터)",
+    "sms_allowance": "기본제공",
+    "summary": "일반 5G요금제보다 더 넉넉한 데이터를 이용할 수 있는 청년 전용 5G요금제",
+    "basic_benefit": {
+      "basicBenefit": "U+ 모바일 TV 기본 월정액 무료"
+    },
+    "device_type": "5G 스마트폰",
+    "data_sharing": "가능(월 데이터 기본 제공량 안에서 60GB)",
+    "social_category": "young",
+    "_id": "6853756e42e369721418e875"
+  },
+  {
+    "plan_name": "5G 데이터 레귤러",
+    "monthly_fee": 63000,
+    "discount_fee": 47250,
+    "data_allowance": "50 GB",
+    "extra_data": "다 쓰면 최대 1Mbps (느린 데이터)",
+    "data_category": "web, kakaotalk, music",
+    "voice_allowance": "집 / 이동전화 무제한 (+부가통화 300분)",
+    "sms_allowance": "기본제공",
+    "summary": "필요한 만큼만 데이터를 선택할 수 있고, 다 쓰고 난 후에도 추가 요금 없이 데이터를 사용할 수 있는 요금제",
+    "basic_benefit": {
+      "basicBenefit": "U+ 모바일 TV 기본 월정액 무료"
+    },
+    "device_type": "5G 스마트폰",
+    "data_sharing": "가능(월 데이터 기본 제공량 안에서 40GB)",
+    "social_category": "all",
+    "_id": "6853756e42e369721418e876"
+  },
+  {
+    "plan_name": "5G 데이터 플러스",
+    "monthly_fee": 66000,
+    "discount_fee": 49500,
+    "data_allowance": "80 GB",
+    "extra_data": "다 쓰면 최대 1Mbps (느린 데이터)",
+    "data_category": "web, kakaotalk, music, video, game",
+    "voice_allowance": "집 / 이동전화 무제한 (+부가통화 300분)",
+    "sms_allowance": "기본제공",
+    "summary": "필요한 만큼만 데이터를 선택할 수 있고, 다 쓰고 난 후에도 추가 요금 없이 데이터를 사용할 수 있는 요금제",
+    "basic_benefit": {
+      "basicBenefit": "U+ 모바일 TV 기본 월정액 무료"
+    },
+    "device_type": "5G 스마트폰",
+    "data_sharing": "가능(월 데이터 기본 제공량 안에서 40GB)",
+    "social_category": "all",
+    "_id": "6853756e42e369721418e877"
+  },
+  {
+    "plan_name": "5G 라이트+",
+    "monthly_fee": 55000,
+    "discount_fee": 41250,
+    "data_allowance": "14 GB",
+    "extra_data": "다 쓰면 최대 1Mbps (느린 데이터)",
+    "data_category": "web, kakaotalk, music",
+    "voice_allowance": "집 / 이동전화 무제한 (+부가통화 300분)",
+    "sms_allowance": "기본제공",
+    "summary": "저렴한 요금으로 U⁺5G 서비스를 이용할 수 있는 5G 실속 요금제",
+    "basic_benefit": {
+      "basicBenefit": "U+ 모바일 TV 라이트 무료"
+    },
+    "device_type": "5G 스마트폰",
+    "data_sharing": "가능(기본 제공 데이터양 내에서 사용 가능. 모두 사용하면 자동 차단)",
+    "social_category": "all",
+    "_id": "6853756e42e369721418e878"
+  },
+  {
+    "plan_name": "유쓰 5G 데이터 플러스",
+    "monthly_fee": 66000,
+    "discount_fee": 49500,
+    "data_allowance": "110 GB",
+    "extra_data": "다 쓰면 최대 1Mbps (느린 데이터)",
+    "data_category": "web, kakaotalk, music, video, game",
+    "voice_allowance": "집 / 이동전화 무제한 (+부가통화 300분)",
+    "sms_allowance": "기본제공",
+    "summary": "일반 5G요금제보다 더 넉넉한 데이터를 이용할 수 있는 청년 전용 5G요금제",
+    "basic_benefit": {
+      "basicBenefit": "U+ 모바일 TV 기본 월정액 무료"
+    },
+    "device_type": "5G 스마트폰",
+    "data_sharing": "가능(월 데이터 기본 제공량 안에서 50GB)",
+    "social_category": "young",
+    "_id": "6853756e42e369721418e879"
+  },
+  {
+    "plan_name": "5G 미니",
+    "monthly_fee": 37000,
+    "discount_fee": 27750,
+    "data_allowance": "5 GB",
+    "extra_data": "다 쓰면 최대 400Kbps (매우 느린 데이터)",
+    "data_category": "web, kakaotalk",
+    "voice_allowance": "집 / 이동전화 무제한 (+부가통화 300분)",
+    "sms_allowance": "기본제공",
+    "summary": "월 3만 원대 가벼운 요금으로 필요한 만큼 데이터를 실속 있게 즐길 수 있는 5G 요금제",
+    "basic_benefit": {
+      "basicBenefit": "U+ 모바일 TV 라이트 무료"
+    },
+    "device_type": "5G 스마트폰",
+    "data_sharing": "가능(기본 제공 데이터양 내에서 사용 가능. 모두 사용하면 자동 차단)",
+    "social_category": "all",
+    "_id": "6853756e42e369721418e87a"
+  },
+  {
+    "plan_name": "유쓰 5G 라이트+",
+    "monthly_fee": 55000,
+    "discount_fee": 41250,
+    "data_allowance": "26 GB",
+    "extra_data": "다 쓰면 최대 1Mbps (느린 데이터)",
+    "data_category": "web, kakaotalk, music",
+    "voice_allowance": "집 / 이동전화 무제한 (+부가통화 300분)",
+    "sms_allowance": "기본제공",
+    "summary": "일반 5G요금제보다 더 넉넉한 데이터를 이용할 수 있는 청년 전용 5G요금제",
+    "basic_benefit": {
+      "basicBenefit": "U+ 모바일 TV 라이트 무료"
+    },
+    "device_type": "5G 스마트폰",
+    "data_sharing": "가능(기본 제공 데이터양 내에서 사용 가능. 모두 사용하면 자동 차단)",
+    "social_category": "young",
+    "_id": "6853756e42e369721418e87b"
+  },
+  {
+    "plan_name": "5G 슬림+",
+    "monthly_fee": 47000,
+    "discount_fee": 35250,
+    "data_allowance": "9 GB",
+    "extra_data": "다 쓰면 최대 400Kbps (매우 느린 데이터)",
+    "data_category": "web, kakaotalk, music",
+    "voice_allowance": "집 / 이동전화 무제한 (+부가통화 300분)",
+    "sms_allowance": "기본제공",
+    "summary": "일반 5G요금제보다 더 넉넉한 데이터를 이용할 수 있는 청년 전용 5G요금제",
+    "basic_benefit": {
+      "basicBenefit": "U+ 모바일 TV 라이트 무료"
+    },
+    "device_type": "5G 스마트폰",
+    "data_sharing": "가능(기본 제공 데이터양 내에서 사용 가능. 모두 사용하면 자동 차단)",
+    "social_category": "all",
+    "_id": "6853756e42e369721418e87c"
+  },
+  {
+    "plan_name": "5G 프리미어 플러스",
+    "monthly_fee": 105000,
+    "discount_fee": 73500,
+    "data_allowance": "무제한",
+    "data_category": "web, kakaotalk, music, video, game",
+    "voice_allowance": "집 / 이동전화 무제한 (+부가통화 300분)",
+    "sms_allowance": "기본제공",
+    "summary": "U⁺5G 서비스는 물론, 스마트 기기 2개와 다양한 콘텐츠까지 마음껏 이용할 수 있는 5G 요금제",
+    "basic_benefit": {
+      "basicBenefit": "(프리미엄 혜택: OTT·구독 등 최대 29,400원 무료) / (미디어 혜택: 콘텐츠·음악 감상 등 최대 9,900원 무료) / U+ 모바일 TV 기본 월정액 무료 / 스마트기기 2대 월정액 할인(2대당 최대 11,000원) / 5G 시그니처 가족 할인 33,000원 (대상 요금제 한함)"
+    },
+    "discount_benefit": {
+      "discountBenefit": "U+투게더 결합 (U+ 휴대폰을 쓰는 친구, 가족과 결합하면 데이터 무제한 요금제를 최대 20,000원(4-5인 결합시) 저렴하게 이용 가능) / 스마트기기 (2대 월정액 할인 - 1대당 최대 11,000원) / 프리미어 요금제 약정 할인 (약정 기간 24개월 동안 통신요금 매달 5,250원 추가 할인) / 로밍 혜택 프로모션 (5G 월정액 85,000원 이상 요금제를 사용할 시 로밍패스 요금제 가입 시 로밍 패스 요금제 기본 데이터 2배)"
+    },
+    "device_type": "5G 스마트폰",
+    "data_sharing": "가능(테더링+쉐어링 100GB)",
+    "social_category": "all",
+    "_id": "6853756e42e369721418e87d"
+  },
+  {
+    "plan_name": "5G 시니어 B형",
+    "monthly_fee": 43000,
+    "discount_fee": 32250,
+    "data_allowance": "10 GB",
+    "voice_allowance": "집 / 이동전화 무제한 (+부가통화 400분)",
+    "extra_data": "다 쓰면 최대 1Mbps (느린 데이터)",
+    "sms_allowance": "기본제공",
+    "summary": "저렴한 요금으로 실속있게 U+5G 서비스를 이용할 수 있는 만 70세 이상~80세 미만 전용 5G 요금제",
+    "basic_benefit": {
+      "basicBenefit": "U+ 모바일 TV 라이트 무료"
+    },
+    "device_type": "5G 스마트폰",
+    "data_sharing": "불가능",
+    "social_category": "senior",
+    "_id": "6853756e42e369721418e87e"
+  },
+  {
+    "plan_name": "(LTE) 데이터 시니어 33",
+    "monthly_fee": 33000,
+    "discount_fee": 24750,
+    "data_allowance": "1.7 GB",
+    "voice_allowance": "1초당 1.98 원",
+    "sms_allowance": "50건",
+    "summary": "음성통화와 문자메시지는 기본으로 사용하고 저렴한 요금으로 데이터를 이용할 수 있는 실속형 시니어 전용 LTE 요금제",
+    "basic_benefit": {
+      "basicBenefit": "실버지킴이"
+    },
+    "device_type": "5G 스마트폰",
+    "data_sharing": "가능(기본 제공 데이터양 내에서 사용 가능. 쉐어링 데이터는 다 쓰면 자동 차단.테더링 데이터는 초과 사용하면 데이터 요금 계산 방식에 따라 추가 요금 발생)",
+    "social_category": "senior",
+    "_id": "6853756e42e369721418e87f"
+  },
+  {
+    "plan_name": "유쓰 5G 슬림+",
+    "monthly_fee": 47000,
+    "discount_fee": 35250,
+    "data_allowance": "15 GB",
+    "extra_data": "다 쓰면 최대 400Kbps (매우 느린 데이터)",
+    "data_category": "web, kakaotalk, music",
+    "voice_allowance": "집 / 이동전화 무제한 (+부가통화 300분)",
+    "sms_allowance": "기본제공",
+    "summary": "일반 5G요금제보다 더 넉넉한 데이터를 이용할 수 있는 청년 전용 5G요금제",
+    "basic_benefit": {
+      "basicBenefit": "U+ 모바일 TV 라이트 무료"
+    },
+    "device_type": "5G 스마트폰",
+    "data_sharing": "가능(기본 제공 데이터양 내에서 사용 가능. 모두 사용하면 자동 차단)",
+    "social_category": "young",
+    "_id": "6853756e42e369721418e880"
+  },
+  {
+    "plan_name": "5G 시니어 A형",
+    "monthly_fee": 45000,
+    "discount_fee": 33750,
+    "data_allowance": "10 GB",
+    "extra_data": "다 쓰면 최대 1Mbps (느린 데이터)",
+    "data_category": "web, kakaotalk, music",
+    "voice_allowance": "집 / 이동전화 무제한 (+부가통화 400분)",
+    "sms_allowance": "기본제공",
+    "summary": "저렴한 요금으로 실속있게 U⁺5G 서비스를 이용할 수 있는 만 65세 이상~70세 미만 전용 5G 요금제",
+    "basic_benefit": {
+      "basicBenefit": "U+ 모바일 TV 라이트 무료"
+    },
+    "device_type": "5G 스마트폰",
+    "data_sharing": "불가능",
+    "social_category": "senior",
+    "_id": "6853756e42e369721418e881"
+  },
+  {
+    "plan_name": "유쓰 5G 데이터 레귤러",
+    "monthly_fee": 63000,
+    "discount_fee": 47250,
+    "data_allowance": "70 GB",
+    "extra_data": "다 쓰면 최대 1Mbps (느린 데이터)",
+    "data_category": "web, kakaotalk, music, video, game",
+    "voice_allowance": "집 / 이동전화 무제한 (+부가통화 300분)",
+    "sms_allowance": "기본제공",
+    "summary": "일반 5G요금제보다 더 넉넉한 데이터를 이용할 수 있는 청년 전용 5G요금제",
+    "basic_benefit": {
+      "basicBenefit": "U+ 모바일 TV 기본 월정액 무료"
+    },
+    "device_type": "5G 스마트폰",
+    "data_sharing": "가능(기본제공량 내 테더링+쉐어링 45GB)",
+    "social_category": "youth",
+    "_id": "6853756e42e369721418e882"
+  },
+  {
+    "plan_name": "(LTE) 데이터 33",
+    "monthly_fee": 33000,
+    "discount_fee": 24750,
+    "data_allowance": "1.5 GB",
+    "voice_allowance": "집 / 이동전화 무제한 (+부가통화 110분)",
+    "sms_allowance": "기본제공",
+    "summary": "음성통화와 문자메시지는 기본으로 사용하고 저렴한 요금으로 데이터를 이용할 수 있는 실속형 요금제",
+    "device_type": "5G 스마트폰",
+    "data_sharing": "불가능",
+    "social_category": "all",
+    "_id": "6853756e42e369721418e883"
+  },
+  {
+    "plan_name": "유쓰 5G 심플+",
+    "monthly_fee": 61000,
+    "discount_fee": 45750,
+    "data_allowance": "41 GB",
+    "extra_data": "다 쓰면 최대 1Mbps (느린 데이터)",
+    "data_category": "web, kakaotalk, music",
+    "voice_allowance": "집 / 이동전화 무제한 (+부가통화 300분)",
+    "sms_allowance": "기본제공",
+    "summary": "일반 5G요금제보다 더 넉넉한 데이터를 이용할 수 있는 청년 전용 5G요금제",
+    "basic_benefit": {
+      "basicBenefit": "U+ 모바일 TV 기본 월정액 무료"
+    },
+    "device_type": "5G 스마트폰",
+    "data_sharing": "불가능",
+    "social_category": "young",
+    "_id": "6853756e42e369721418e884"
+  },
+  {
+    "plan_name": "5G 베이직+",
+    "monthly_fee": 59000,
+    "discount_fee": 44250,
+    "data_allowance": "24 GB",
+    "extra_data": "다 쓰면 최대 1Mbps (느린 데이터)",
+    "data_category": "web, kakaotalk, music",
+    "voice_allowance": "집 / 이동전화 무제한 (+부가통화 300분)",
+    "sms_allowance": "기본제공",
+    "summary": "필요한 만큼의 데이터를 합리적인 요금으로 즐길 수 있는 5G요금제",
+    "basic_benefit": {
+      "basicBenefit": "U+ 모바일 TV 라이트 무료"
+    },
+    "device_type": "5G 스마트폰",
+    "data_sharing": "불가능",
+    "social_category": "all",
+    "_id": "6853756e42e369721418e885"
+  },
+  {
+    "plan_name": "5G 시니어 C형",
+    "monthly_fee": 39000,
+    "discount_fee": 29250,
+    "data_allowance": "10 GB",
+    "extra_data": "다 쓰면 최대 1Mbps (느린 데이터)",
+    "data_category": "web, kakaotalk, music",
+    "voice_allowance": "집 / 이동전화 무제한 (+부가통화 400분)",
+    "sms_allowance": "기본제공",
+    "summary": "저렴한 요금으로 실속있게 U+5G 서비스를 이용할 수 있는 만 80세 이상 전용 5G 요금제",
+    "basic_benefit": {
+      "basicBenefit": "U+ 모바일 TV 라이트 무료"
+    },
+    "device_type": "5G 스마트폰",
+    "data_sharing": "불가능",
+    "social_category": "senior",
+    "_id": "6853756e42e369721418e886"
+  },
+  {
+    "plan_name": "5G 스탠다드 에센셜",
+    "monthly_fee": 70000,
+    "discount_fee": 52500,
+    "data_allowance": "125 GB",
+    "extra_data": "다 쓰면 최대 5Mbps (빠른 데이터)",
+    "data_category": "web, kakaotalk, music, video, game",
+    "voice_allowance": "집 / 이동전화 무제한 (+부가통화 300분)",
+    "sms_allowance": "기본제공",
+    "summary": "필요한 만큼만 데이터를 선택할 수 있고, 다 쓰고 난 후에도 추가 요금 없이 데이터를 사용할 수 있는 요금제",
+    "basic_benefit": {
+      "basicBenefit": "U+ 모바일 TV 기본 월정액 무료"
+    },
+    "device_type": "5G 스마트폰",
+    "data_sharing": "가능(월 데이터 기본 제공량 안에서 55GB)",
+    "social_category": "senior",
+    "_id": "6853756e42e369721418e887"
+  },
+  {
+    "plan_name": "시니어16.5",
+    "monthly_fee": 16500,
+    "discount_fee": 12375,
+    "data_allowance": "300 MB",
+    "voice_allowance": "70 분 (+지정번호 3개 음성통화 50분 / 영상통화 30분 사용 가능)",
+    "sms_allowance": "100건",
+    "summary": "가족과 통화는 자주 하고 LTE 데이터사용을 원하는 만 65세 이상 고객님을 위한 LTE 요금제",
+    "basic_benefit": {
+      "basicBenefit": "U+ 모바일 TV 기본 월정액 무료"
+    },
+    "device_type": "5G 스마트폰",
+    "data_sharing": "가능(기본제공 데이터양 내에서 사용 가능. 모두 사용하면 자동 차단)",
+    "social_category": "senior",
+    "_id": "6853756e42e369721418e888"
+  },
+  {
+    "plan_name": "(LTE) 추가 요금 걱정 없는 데이터 69",
+    "monthly_fee": 69000,
+    "discount_fee": 51750,
+    "data_allowance": "일 5 GB",
+    "data_category": "web, kakaotalk, music, video, game",
+    "voice_allowance": "집 / 이동전화 무제한 (+부가통화 300분)",
+    "sms_allowance": "기본제공",
+    "summary": "추가 요금 걱정 없이 동영상, 고용량 콘텐츠까지 마음껏 이용할 수 있는 LTE요금제",
+    "basic_benefit": {
+      "basicBenefit": "U+ 모바일 TV 기본 월정액 무료"
+    },
+    "device_type": "5G 스마트폰",
+    "data_sharing": "가능(월 11GB 별도 제공, 다 쓰면 자동 차단)",
+    "social_category": "all",
+    "_id": "6853756e42e369721418e889"
+  },
+  {
+    "plan_name": "5G 데이터 슈퍼",
+    "monthly_fee": 68000,
+    "discount_fee": 51000,
+    "data_allowance": "95 GB",
+    "extra_data": "다 쓰면 최대 3Mbps (보통 데이터)",
+    "data_category": "web, kakaotalk, music, video, game",
+    "voice_allowance": "집 / 이동전화 무제한 (+부가통화 300분)",
+    "sms_allowance": "기본제공",
+    "summary": "필요한 만큼만 데이터를 선택할 수 있고, 다 쓰고 난 후에도 추가 요금 없이 데이터를 사용할 수 있는 요금제",
+    "basic_benefit": {
+      "basicBenefit": "U+ 모바일 TV 기본 월정액 무료"
+    },
+    "device_type": "5G 스마트폰",
+    "data_sharing": "가능(기본제공량 내 테더링+쉐어링 50GB)",
+    "social_category": "all",
+    "_id": "6853756e42e369721418e88a"
+  },
+  {
+    "plan_name": "유쓰 5G 스탠다드 에센셜",
+    "monthly_fee": 70000,
+    "discount_fee": 52500,
+    "data_allowance": "185 GB",
+    "extra_data": "다 쓰면 최대 3Mbps (보통 데이터)",
+    "data_category": "web, kakaotalk, music, video, game",
+    "voice_allowance": "집 / 이동전화 무제한 (+부가통화 300분)",
+    "sms_allowance": "기본제공",
+    "summary": "일반 5G요금제보다 더 넉넉한 데이터를 이용할 수 있는 청년 전용 5G요금제",
+    "basic_benefit": {
+      "basicBenefit": "U+ 모바일 TV 기본 월정액 무료"
+    },
+    "device_type": "5G 스마트폰",
+    "data_sharing": "가능(월 데이터 기본 제공량 안에서 60GB)",
+    "social_category": "young",
+    "_id": "6853756e42e369721418e88b"
+  },
+  {
+    "plan_name": "LTE 표준",
+    "monthly_fee": 11990,
+    "discount_fee": 8992,
+    "data_allowance": "1 KB당 0.275 원",
+    "voice_allowance": "1초당 1.98 원",
+    "sms_allowance": "50건",
+    "summary": "데이터와 음성통화는 사용한 만큼 요금을 내고, 문자메시지 50건을 기본제공 받는 LTE 요금제",
+    "device_type": "5G 스마트폰",
+    "data_sharing": "불가능",
+    "social_category": "all",
+    "_id": "6853756e42e369721418e88c"
+  },
+  {
+    "plan_name": "5G 시그니처",
+    "monthly_fee": 130000,
+    "discount_fee": 92250,
+    "data_allowance": "무제한",
+    "data_category": "web, kakaotalk, music, video, game",
+    "voice_allowance": "집 / 이동전화 무제한 (+부가통화 300분)",
+    "sms_allowance": "기본제공",
+    "summary": "U⁺5G 서비스와 프리미엄 혜택을 마음껏 즐기고, 가족과 공유할 수 있는 데이터까지 추가로 받는 5G 요금제",
+    "basic_benefit": {
+      "basicBenefit": "U+ 모바일 TV 기본 월정액 무료 / U+멤버십 VVIP 등급 혜택"
+    },
+    "discount_benefit": {
+      "discountBenefit": "U+투게더 결합 (U+ 휴대폰을 쓰는 친구, 가족과 결합하면 데이터 무제한 요금제를 최대 20,000원(4-5인 결합시) 저렴하게 이용 가능) / 5G 시그니처 가족할인 (만 18세 이하 자녀가 만 20세가 되는 날까지 휴대폰 1개 월정액 최대 33,000원 할인 가능, 5G 시그니처 요금제에 가입한 부모님이 자녀의 법정대리인으로 등록되어 있어야 함) / 스마트기기 (2대 월정액 할인 - 1대당 최대 11,000원) / 프리미어 요금제 약정 할인 (약정 기간 24개월 동안 통신요금 매달 5,250원 추가 할인) / 로밍 혜택 프로모션 (5G 월정액 85,000원 이상 요금제를 사용할 시 로밍패스 요금제 가입 시 로밍 패스 요금제 기본 데이터 2배)"
+    },
+    "special_benefit": {
+      "specialBenefit": "프리미엄 서비스 기본 제공(택1) : 폰 교체 패스, 삼성팩, 티빙이용권 할인, 디즈니 +, 넷플릭스, 헬로렌탈구독, 일리커피구독, 우리집지킴이 Easy2+, 우리집돌봄이 Kids, 신한카드 Air, 유튜브 프리미엄 할인, 멀티팩(프리미엄 서비스 대신 미디어 서비스 4개 (아이들나라 스탠다드+러닝, 바이브 음악감상, 지니뮤직 음악감상, 밀리의 서재) 중 3개 선택 가능) / 미디어 서비스 기본 제공 (택1) : 아이들나라 스탠다드+러닝, 바이브 앱 음악감상, 유플레이, 밀리의 서재, 지니뮤직 앱 음악감상"
+    },
+    "device_type": "5G 스마트폰",
+    "data_sharing": "가능(테더링+쉐어링 120GB)",
+    "social_category": "all",
+    "_id": "6853756e42e369721418e88d"
+  },
+  {
+    "plan_name": "유쓰 5G 데이터 슈퍼",
+    "monthly_fee": 68000,
+    "discount_fee": 51000,
+    "data_allowance": "135 GB",
+    "extra_data": "다 쓰면 최대 3Mbps (보통 데이터)",
+    "data_category": "web, kakaotalk, music, video, game",
+    "voice_allowance": "집 / 이동전화 무제한 (+부가통화 300분)",
+    "sms_allowance": "기본제공",
+    "summary": "필요한 만큼만 데이터를 선택할 수 있고, 다 쓰고 난 후에도 추가 요금 없이 데이터를 사용할 수 있는 요금제",
+    "basic_benefit": {
+      "basicBenefit": "U+ 모바일 TV 기본 월정액 무료"
+    },
+    "device_type": "5G 스마트폰",
+    "data_sharing": "가능(월 데이터 기본 제공량 안에서 50GB)",
+    "social_category": "young",
+    "_id": "6853756e42e369721418e88e"
+  },
+  {
+    "plan_name": "유쓰 5G 베이직+",
+    "monthly_fee": 59000,
+    "discount_fee": 44250,
+    "data_allowance": "36 GB",
+    "extra_data": "다 쓰면 최대 1Mbps (느린 데이터)",
+    "data_category": "web, kakaotalk, music",
+    "voice_allowance": "집 / 이동전화 무제한 (+부가통화 300분)",
+    "sms_allowance": "기본제공",
+    "summary": "일반 5G요금제보다 더 넉넉한 데이터를 이용할 수 있는 청년 전용 5G 요금제",
+    "basic_benefit": {
+      "basicBenefit": "U+ 모바일 TV 라이트 무료"
+    },
+    "device_type": "5G 스마트폰",
+    "data_sharing": "가능(데이터 기본제공량 안에서 사용 가능, 다 쓰면 자동 차단)",
+    "social_category": "young",
+    "_id": "6853756e42e369721418e88f"
+  },
+  {
+    "plan_name": "(LTE) 현역병사 데이터 55",
+    "monthly_fee": 55000,
+    "discount_fee": 41250,
+    "data_allowance": "매일 5 GB",
+    "data_category": "web, kakaotalk, music, video, game",
+    "voice_allowance": "집 / 이동전화 무제한 (+부가통화 300분)",
+    "sms_allowance": "기본제공",
+    "summary": "추가 요금 걱정 없이 동영상, 고용량 콘텐츠까지 마음껏 이용할 수 있는 현역병사 전용 LTE 요금제",
+    "basic_benefit": {
+      "basicBenefit": "U+ 모바일 TV 기본 월정액 무료 / 바이브 앱 음악감상"
+    },
+    "device_type": "5G 스마트폰",
+    "data_sharing": "가능(월 5GB 별도 제공, 다 쓰면 자동 차단)",
+    "social_category": "soldier",
+    "_id": "6853756e42e369721418e890"
+  },
+  {
+    "plan_name": "(LTE)현역병사 데이터 33",
+    "monthly_fee": 33000,
+    "discount_fee": 24750,
+    "data_allowance": "월 2 GB + 매일 2 GB",
+    "data_category": "web, kakaotalk, music",
+    "voice_allowance": "집 / 이동전화 무제한 (+부가통화 110분)",
+    "sms_allowance": "기본제공",
+    "summary": "추가 요금 걱정 없이 SNS,메신저, 웹서핑 등의 서비스를 마음껏 이용할 수 있는 현역병사 LTE 요금제",
+    "device_type": "5G 스마트폰",
+    "data_sharing": "가능(데이터 기본제공량 안에서 사용 가능, 다 쓰면 자동 차단)",
+    "social_category": "soldier",
+    "_id": "6853756e42e369721418e891"
+  },
+  {
+    "plan_name": "5G 라이트 청소년",
+    "monthly_fee": 45000,
+    "discount_fee": 33750,
+    "data_allowance": "8 GB",
+    "extra_data": "다 쓰면 최대 1Mbps (느린 데이터)",
+    "data_category": "web, kakaotalk",
+    "voice_allowance": "집 / 이동전화 무제한 (+부가통화 300분)",
+    "sms_allowance": "기본제공",
+    "summary": "저렴한 요금으로 실속있게 U⁺5G 서비스를 이용할 수 있는 청소년 전용 5G 요금제",
+    "basic_benefit": {
+      "basicBenefit": "U+ 모바일 TV 라이트 무료"
+    },
+    "device_type": "5G 스마트폰",
+    "data_sharing": "가능(데이터 기본제공량 안에서 사용 가능, 다 쓰면 자동 차단)",
+    "social_category": "teen",
+    "_id": "6853756e42e369721418e892"
+  },
+  {
+    "plan_name": "(LTE) 추가 요금 걱정 없는 데이터 시니어 69",
+    "monthly_fee": 69000,
+    "discount_fee": 51750,
+    "data_allowance": "매일 5GB",
+    "extra_data": "다 쓰면 최대 5Mbps (빠른 데이터)",
+    "data_category": "web, kakaotalk, music, video, game",
+    "summary": "추가 요금 걱정없이 동영상, 고용량 콘텐츠까지 마음껏 이용할 수 있는 시니어 전용 LTE 요금제",
+    "basic_benefit": {
+      "basicBenefit": "U⁺ 모바일tv 기본 월정액 무료 / 실버지킴이"
+    },
+    "device_type": "5G 스마트폰",
+    "data_sharing": "가능(월 15GB 별도 제공, 다 쓰면 자동 차단)",
+    "social_category": "senior",
+    "_id": "6853756e42e369721418e893"
+  },
+  {
+    "plan_name": "5G 프리미어 슈퍼",
+    "monthly_fee": 115000,
+    "discount_fee": 81000,
+    "data_allowance": "무제한",
+    "data_category": "web, kakaotalk, music, video, game",
+    "summary": "U⁺5G 서비스와 프리미엄 혜택을 마음껏 즐기고, 가족과 공유할 수 있는 데이터까지 추가로 받는 5G 요금제",
+    "basic_benefit": {
+      "basicBenefit": "U+ 모바일 TV 기본 월정액 무료 / U+멤버십 VVIP 등급 혜택"
+    },
+    "discount_benefit": {
+      "discountBenefit": "U+투게더 결합 (U+ 휴대폰을 쓰는 친구, 가족과 결합하면 데이터 무제한 요금제를 최대 20,000원(4-5인 결합시) 저렴하게 이용 가능) / 스마트기기 (2대 월정액 할인 - 1대당 최대 11,000원) / 프리미어 요금제 약정 할인 (약정 기간 24개월 동안 통신요금 매달 5,250원 추가 할인) / 로밍 혜택 프로모션 (5G 월정액 85,000원 이상 요금제를 사용할 시 로밍패스 요금제 가입 시 로밍 패스 요금제 기본 데이터 2배)"
+    },
+    "special_benefit": {
+      "specialBenefit": "프리미엄 서비스 기본 제공(택1) : 폰 교체 패스, 삼성팩, 티빙이용권 할인, 디즈니 +, 넷플릭스, 헬로렌탈구독, 일리커피구독, 우리집지킴이 Easy2+, 우리집돌봄이 Kids, 신한카드 Air, 유튜브 프리미엄 할인, 멀티팩(프리미엄 서비스 대신 미디어 서비스 4개 (아이들나라 스탠다드+러닝, 바이브 음악감상, 지니뮤직 음악감상, 밀리의 서재) 중 3개 선택 가능) / 미디어 서비스 기본 제공 (택1) : 아이들나라 스탠다드+러닝, 바이브 앱 음악감상, 유플레이, 밀리의 서재, 지니뮤직 앱 음악감상"
+    },
+    "device_type": "5G 스마트폰",
+    "data_sharing": "가능(테더링+쉐어링 100GB)",
+    "social_category": "all",
+    "_id": "6853756e42e369721418e894"
+  },
+  {
+    "plan_name": "(LTE) 추가 요금 걱정 없는 데이터 청소년 33",
+    "monthly_fee": 33000,
+    "discount_fee": 24750,
+    "data_allowance": "2 GB",
+    "voice_allowance": "집 / 이동전화 무제한 (+부가통화 110분)",
+    "sms_allowance": "기본제공",
+    "summary": "추가 요금 걱정 없이 SNS, 메신저, 웹서핑, 이메일 등의 서비스를 마음껏 이용할 수 있는 청소년 전용 LTE 요금제",
+    "device_type": "5Gs 스마트폰",
+    "data_sharing": "가능(데이터 기본제공량 안에서 사용 가능, 다 쓰면 자동 차단)",
+    "social_category": "teen",
+    "_id": "6853756e42e369721418e895"
+  },
+  {
+    "plan_name": "(LTE) 복지 33",
+    "monthly_fee": 33000,
+    "discount_fee": 24750,
+    "data_allowance": "2 GB",
+    "voice_allowance": "집 / 이동전화 무제한 (+부가통화 600분)",
+    "sms_allowance": "기본제공",
+    "summary": "복지할인 받는 고객님을 위한 LTE 요금제",
+    "device_type": "5G 스마트폰",
+    "data_sharing": "가능(데이터 기본제공량 안에서 사용 가능, 다 쓰면 자동 차단)",
+    "social_category": "senior",
+    "_id": "6853756e42e369721418e896"
+  },
+  {
+    "plan_name": "(LTE) 복지 49",
+    "monthly_fee": 49000,
+    "discount_fee": 36750,
+    "data_allowance": "6 GB",
+    "voice_allowance": "집 / 이동전화 무제한 (+부가통화 600분)",
+    "sms_allowance": "기본제공",
+    "summary": "복지할인 받는 고객님을 위한 LTE 요금제",
+    "device_type": "5G 스마트폰",
+    "data_sharing": "가능(데이터 기본제공량 안에서 사용 가능, 다 쓰면 자동 차단)",
+    "social_category": "senior",
+    "_id": "6853756e42e369721418e897"
+  },
+  {
+    "plan_name": "(LTE) 추가 요금 걱정 없는 데이터 청소년 69",
+    "monthly_fee": 69000,
+    "discount_fee": 51750,
+    "data_allowance": "매일 5 GB",
+    "data_category": "web, kakaotalk, music, video, game",
+    "voice_allowance": "집 / 이동전화 무제한 (+부가통화 300분)",
+    "sms_allowance": "기본제공",
+    "summary": "추가 요금 걱정 없이 동영상, 고용량 콘텐츠까지 마음껏 이용할 수 있는 청소년 전용 LTE 요금제",
+    "basic_benefit": {
+      "basicBenefit": "U+ 모바일 TV 기본 월정액 무료"
+    },
+    "device_type": "5G 스마트폰",
+    "data_sharing": "가능(월 15GB 별도 제공, 다 쓰면 자동 차단)",
+    "social_category": "teen",
+    "_id": "6853756e42e369721418e898"
+  },
+  {
+    "plan_name": "5G 복지 55",
+    "monthly_fee": 55000,
+    "discount_fee": 41250,
+    "data_allowance": "14 GB",
+    "extra_data": "다 쓰면 최대 1Mbps (느린 데이터)",
+    "data_category": "web, kakaotalk, music",
+    "voice_allowance": "집 / 이동전화 무제한 (+부가통화 600분)",
+    "sms_allowance": "기본제공",
+    "summary": "복지할인 받는 고객님을 위한 5G 요금제",
+    "basic_benefit": {
+      "basicBenefit": "U+ 모바일 TV 라이트 무료"
+    },
+    "device_type": "5G 스마트폰",
+    "data_sharing": "불가능",
+    "social_category": "senior",
+    "_id": "6853756e42e369721418e899"
+  },
+  {
+    "plan_name": "LTE 청소년19",
+    "monthly_fee": 20900,
+    "discount_fee": 15675,
+    "data_allowance": "350 MB",
+    "voice_allowance": "음성통화 20,000원당(1초에 2.5원)",
+    "sms_allowance": "1,000건",
+    "summary": "기본 제공 링 안에서 자유롭게 조절하며 쓸 수 있고, 추가로 LTE 데이터까지 사용할 수 있는 LTE 요금제",
+    "basic_benefit": {
+      "basicBenefit": "U+ 모바일 TV 라이트 무료"
+    },
+    "device_type": "5G 스마트폰",
+    "data_sharing": "불가능",
+    "social_category": "teen",
+    "_id": "6853756e42e369721418e89a"
+  },
+  {
+    "plan_name": "(LTE) 추가 요금 걱정 없는 데이터 청소년 59",
+    "monthly_fee": 59000,
+    "discount_fee": 44250,
+    "data_allowance": "9 GB",
+    "extra_data": "다 쓰면 최대 1Mbps (느린 데이터)",
+    "data_category": "web, kakaotalk",
+    "voice_allowance": "집 / 이동전화 무제한 (+부가통화 300분)",
+    "sms_allowance": "기본제공",
+    "summary": "추가 요금 걱정 없이 SNS, 메신저, 웹서핑 등의 서비스를 마음껏 이용할 수 있는 청소년 전용 LTE 요금제",
+    "basic_benefit": {
+      "basicBenefit": "U+ 모바일 TV 기본 월정액 무료"
+    },
+    "device_type": "5G 스마트폰",
+    "data_sharing": "가능(월 데이터 기본 제공량 안에서 사용, 다 쓰면 자동 차단)",
+    "social_category": "teen",
+    "_id": "6853756e42e369721418e89b"
+  },
+  {
+    "plan_name": "5G 복지 75",
+    "monthly_fee": 75000,
+    "discount_fee": 56250,
+    "data_allowance": "150 GB",
+    "extra_data": "다 쓰면 최대 5Mbps (보통 데이터)",
+    "data_category": "web, kakaotalk, music, video, game",
+    "voice_allowance": "집 / 이동전화 무제한 (+부가통화 600분)",
+    "sms_allowance": "기본제공",
+    "summary": "복지할인 받는 고객님을 위한 5G 요금제",
+    "basic_benefit": {
+      "basicBenefit": "U+ 모바일 TV 기본 월정액 무료 / U+멤버십 VIP 등급 혜택"
+    },
+    "device_type": "5G 스마트폰",
+    "data_sharing": "가능(월 데이터 기본 제공량 안에서 60GB)",
+    "social_category": "senior",
+    "_id": "6853756e42e369721418e89c"
+  },
+  {
+    "plan_name": "5G 키즈 29",
+    "monthly_fee": 29000,
+    "discount_fee": 21750,
+    "data_allowance": "3.3 GB",
+    "extra_data": "다 쓰면 최대 400Kbps (매우 느린 데이터)",
+    "voice_allowance": "집/이동전화 무제한 (+부가통화 100분)",
+    "sms_allowance": "기본제공",
+    "summary": "저렴한 요금으로 실속 있게 U+5G 서비스를 이용할 수 있는 만 12세 이하 전용 5G요금제",
+    "device_type": "5G 스마트폰",
+    "data_sharing": "가능(월 데이터 기본 제공량 안에서 사용, 다 쓰면 자동 차단)",
+    "social_category": "kids",
+    "_id": "6853756e42e369721418e89d"
+  },
+  {
+    "plan_name": "5G 키즈 39",
+    "monthly_fee": 39000,
+    "discount_fee": 29250,
+    "data_allowance": "5.5 GB",
+    "data_category": "web, kakaotalk",
+    "extra_data": "다 쓰면 최대 1Mbps (느린 데이터)",
+    "voice_allowance": "집/이동전화 무제한 (+부가통화 300분)",
+    "sms_allowance": "기본제공",
+    "summary": "저렴한 요금으로 실속 있게 U+5G 서비스를 이용할 수 있는 만 12세 이하 전용 5G요금제",
+    "basic_benefit": {
+      "basicBenefit": "바이브 300회 음악감상"
+    },
+    "device_type": "5G 스마트폰",
+    "data_sharing": "가능(월 데이터 기본 제공량 안에서 사용, 다 쓰면 자동 차단)",
+    "social_category": "kids",
+    "_id": "6853756e42e369721418e89e"
+  },
+  {
+    "plan_name": "5G 키즈 45",
+    "monthly_fee": 45000,
+    "discount_fee": 33750,
+    "data_allowance": "9 GB",
+    "data_category": "web, kakaotalk",
+    "extra_data": "다 쓰면 최대 1Mbps (느린 데이터)",
+    "voice_allowance": "집/이동전화 무제한 (+부가통화 300분)",
+    "sms_allowance": "기본제공",
+    "summary": "저렴한 요금으로 실속 있게 U+5G 서비스를 이용할 수 있는 만 12세 이하 전용 5G요금제",
+    "basic_benefit": {
+      "basicBenefit": "바이브 300회 음악감상"
+    },
+    "device_type": "5G 스마트폰",
+    "data_sharing": "가능(월 데이터 기본 제공량 안에서 사용, 다 쓰면 자동 차단)",
+    "social_category": "kids",
+    "_id": "6853756e42e369721418e89f"
+  },
+  {
+    "plan_name": "LTE 선택형 요금제",
+    "monthly_fee": 20900,
+    "discount_fee": 15675,
+    "data_allowance": "250 MB ~ 1 GB",
+    "voice_allowance": "음성통화 100분 ~ 200분",
+    "sms_allowance": "0건 ~ 1,000건",
+    "summary": "음성통화와 데이터, 문자메시지 기본제공량을 원하는 대로 선택할 수 있는 LTE 요금제 평소 나의 데이터 사용량, 음성통화량 등을 바탕으로 요금제를 구성할 수 있습니다. ※ LG유플러스 고객센터 114(무료) 또는 가까운 LG유플러스 매장에서만 가입할 수 있습니다.",
+    "device_type": "5G 스마트폰",
+    "data_sharing": "불가능",
+    "social_category": "all",
+    "_id": "6853756e42e369721418e8a0"
+  },
+  {
+    "plan_name": "LTE 키즈 22 (만 12세 이하)",
+    "monthly_fee": 22000,
+    "discount_fee": 16500,
+    "data_allowance": "700 MB",
+    "extra_data": "다 쓰면 최대 400Kbps (매우 느린 데이터)",
+    "voice_allowance": "음성통화 60분 (+지정번호 2개 음성통화 무제한)",
+    "sms_allowance": "기본제공",
+    "summary": "저렴한 가격으로 음성통화, 메시지, 데이터를 함께 쓸 수 있는 LTE 요금제",
+    "device_type": "5G 스마트폰",
+    "data_sharing": "가능(월 데이터 기본 제공량 안에서 사용)",
+    "social_category": "kids",
+    "_id": "6853756e42e369721418e8a1"
+  },
+  {
+    "plan_name": "5G 듀얼넘버 플러스",
+    "monthly_fee": 8800,
+    "data_allowance": "250MB",
+    "extra_data": "다 쓰면 최대 400Kbps (매우 느린 데이터)",
+    "summary": "유심과 eSIM을 동시에 사용해 하나의 휴대폰으로 두 개의 번호를 이용할 수 있는 5G요금제",
+    "device_type": "5G 스마트폰",
+    "data_sharing": "가능(eSIM으로 이용 중인 휴대폰번호로 대표 휴대폰번호의 데이터, 음성통화, 문자메시지 기본제공량을 이용 가능)",
+    "social_category": "all",
+    "_id": "6853756e42e369721418e8a2"
+  }
+]
