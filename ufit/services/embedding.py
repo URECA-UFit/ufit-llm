@@ -12,26 +12,28 @@ if not OPENAI_API_KEY:
     raise ValueError("OPENAI_API_KEY is not set")
 os.environ["OPENAI_API_KEY"] = OPENAI_API_KEY
 
-#plans.json 경로
-file_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'data', 'plans.json'))
+# plans.json 경로
+file_path = os.path.abspath(
+    os.path.join(os.path.dirname(__file__), "..", "data", "plans_0619.json")
+)
 
-#json 파일을 문서로 변환
-with open(file_path, 'r', encoding='utf-8') as f:
+# json 파일을 문서로 변환
+with open(file_path, "r", encoding="utf-8") as f:
     plans = json.load(f)
 
-#문서 생성
+# 문서 생성
 docs = [
     Document(
         page_content=generate_final_output(plan),
-        metadata={"name": plan["plan_name"], "idx": plan["idx"]}
+        metadata={"mongo_id": plan["_id"], "plan_name": plan["plan_name"]},
     )
     for plan in plans
 ]
 
-#임베딩 모델 생성
+# 임베딩 모델 생성
 embedding_model = OpenAIEmbeddings(model="text-embedding-3-small")
 
-#PGVector 연결 설정
+# PGVector 연결 설정
 PGVECTOR_CONNECTIONS_STRING = os.getenv("PGVECTOR_CONNECTIONS_STRING")
 collection_name = "plans"
 
@@ -39,7 +41,7 @@ vectorstore = PGVector.from_documents(
     documents=docs,
     embedding=embedding_model,
     connection_string=PGVECTOR_CONNECTIONS_STRING,
-    collection_name=collection_name
+    collection_name=collection_name,
 )
 
 print("embedding success")
