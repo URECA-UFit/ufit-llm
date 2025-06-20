@@ -31,6 +31,7 @@ def run_ufit_graph(
 
     initial_state: State = {
         "messages": history.messages,
+        "history": history,
         "content": content,
         "rewriten_content": content,
         "is_safe": False,
@@ -43,8 +44,6 @@ def run_ufit_graph(
     }
 
     state = ufit_graph.invoke(initial_state)
-    history.add_user_message(state["content"])
-    history.add_ai_message(state["answer"])
 
     # response 가공
     chat_bot_messages = mongo_db.get_collection("chat_bot_messages")

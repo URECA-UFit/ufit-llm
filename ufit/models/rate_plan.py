@@ -9,13 +9,11 @@ class RatePlan(BaseModel):
     plan_name: str
     summary: str
     monthly_fee: int
-    discount_fee: Optional[int] = None
+    discount_fee: int
     data_allowance: Optional[str] = None
     voice_allowance: Optional[str] = None
     sms_allowance: Optional[str] = None
-    basic_benefit: Optional[Dict[str, Any]] = None
-    special_benefit: Optional[Dict[str, Any]] = None
-    discount_benefit: Optional[Dict[str, Any]] = None
+    basic_benefit: Dict[str, Any]
     is_enabled: bool
     is_deleted: bool
 

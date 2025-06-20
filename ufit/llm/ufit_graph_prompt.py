@@ -1,4 +1,7 @@
-from langchain.prompts import ChatPromptTemplate, SystemMessagePromptTemplate, HumanMessagePromptTemplate
+from langchain.prompts import ChatPromptTemplate, SystemMessagePromptTemplate, HumanMessagePromptTemplate, MessagesPlaceholder
+from langchain_core.messages import BaseMessage
+from typing import List
+
 
 UFIT_COMMON_STYLE = """당신은 사용자에게 LG U+ 요금제를 추천하는 친절한 챗봇 'UFit'입니다.
 
@@ -38,6 +41,7 @@ def get_safe_query_prompt(input: str):
 
 다음 사용자 입력을 평가하고 아래와 같은 **JSON 형식으로만** 결과를 반환하세요.
 
+
 ## 출력 형식 (JSON)
 {{
   "is_safe": true
@@ -51,75 +55,44 @@ def get_safe_query_prompt(input: str):
 
 시스템 프롬프트 가이드라인에 따라 위 질문이 안전한지 판단해 주세요.
 
+
 ## 출력 형식 (JSON)
 {{
   "is_safe": true
 }}
+
 출력 형식을 엄격하게 준수해야 합니다."""
+
         )
     ])
     return prompt.format_prompt(input=input)
 
-def get_rewrite_query_prompt(chat_history: str):
-    """
-    대화 기록을 바탕으로 사용자의 마지막 질문을 독립적인 질문으로 재작성하는 프롬프트를 생성합니다.
-    """
+def get_rewrite_query_prompt(chat_history: List[BaseMessage], input: str):
     prompt = ChatPromptTemplate.from_messages([
-        SystemMessagePromptTemplate.from_template(
-            """당신은 멀티턴 대화에서 사용자의 메시지를 독립적인 질문으로 재구성하는 재작성 도우미입니다.
+    MessagesPlaceholder(variable_name="chat_history"),  # 과거 메시지 (List[BaseMessage])
+    SystemMessagePromptTemplate.from_template(
+        """
+당신은 마지막 질문을 사용자의 **과거 대화를 바탕으로 요약 해서 문맥에 맞게 다시 작성**해야 합니다 AI답변은 최대한 배제하고 HUMAN 질문 위주로 파악해주세요.
+- AI의 답변에서 얻은 요금제 정보를 **절대 사용하지 마세요.**
+- Make sure to think step-by-step when answering
 
-지침:
-- 전체 대화 기록을 고려하세요.
-- 사용자의 가장 최근 메시지만 독립적인 질문으로 재작성하세요.
-- 이전 맥락 없이도 이해할 수 있도록 원래 의도를 유지하세요.
-
-출력 형식:
-{{
-  "rewritten_question": "..."
-}}"""
-        ),
-        HumanMessagePromptTemplate.from_template(
-            """다음은 사용자와 어시스턴트 간의 대화입니다.
-
-대화 기록:
-{chat_history}
-
-이제 사용자의 **마지막 메시지**를 독립적인 질문으로 재작성하세요.
-
-## 출력 형식 (JSON)
-{{
-  "rewritten_question": "..."
-}}
-정확한 형식을 따라야 합니다."""
-        )
-    ])
-    return prompt.format_prompt(chat_history=chat_history)
-
-def get_self_evaluation_prompt(q1: str, q2: str):
-    """
-    두 질문 중 사용자의 의도를 더 잘 반영하는 질문을 선택하는 자체 평가 프롬프트를 생성합니다.
-    """
-    prompt = ChatPromptTemplate.from_messages([
-        SystemMessagePromptTemplate.from_template(
-            "아래 두 질문 중 사용자의 원래 의도를 가장 잘 반영하는 질문을 선택하세요. JSON 형식으로만 출력하세요."
-        ),
-        HumanMessagePromptTemplate.from_template(
-            """질문 1: \"{q1}\"
-질문 2: \"{q2}\"
-
-더 나은 질문을 선택하고 다음 형식으로 출력하세요:
-{{ "chosen": "질문 1" }} 또는 {{ "chosen": "질문 2" }}"""
-        )
-    ])
-    return prompt.format_prompt(q1=q1, q2=q2)
-
+        """
+    ),
+    HumanMessagePromptTemplate.from_template(
+        """사용자의 마지막 질문: {input}
+- 반드시 요약한 내용만 출력하세요.
+        """
+    )
+])
+    return prompt.format_messages(chat_history=chat_history, input = input)
+    
 def get_rateplan_related_prompt(input: str):
     """
     사용자 질문이 요금제와 관련이 있는지 분류하는 프롬프트를 생성합니다.
     """
     prompt = ChatPromptTemplate.from_messages([
         SystemMessagePromptTemplate.from_template(
-            """당신은 사용자의 질문이 휴대폰 요금제 추천과 조금이라도 관련이 있는지 판단하는 분류 어시스턴트입니다.
+            """당신은 사용자의 질문이 휴대폰 **요금제 추천과 조금이라도 관련**이 있는지 판단하는 분류 어시스턴트입니다.
 
 입력된 질문이 SNS/모바일/데이터/통화/문자 요금제, 가격, 데이터 한도, OTT 혜택 또는 유사한 주제에 관한 것인지에 따라 분류하세요.
 요금제 추천해줘 같은 질문도 휴대폰 요금제와 관련있습니다.
@@ -132,8 +105,8 @@ def get_rateplan_related_prompt(input: str):
 
 이것들은 예시일 뿐입니다. 의미적으로 유사하거나 다르게 표현된 문구도 고려하세요.
 
-다음 JSON 형식으로 응답하세요:
-
+다음 반드시 JSON 형식으로 응답하세요:
+## 출력 형태
 {{
   "is_rateplan_related": true
 }}"""
@@ -188,6 +161,8 @@ def get_other_carrier_prompt(input: str):
 - "유플러스 무제한 요금제 궁금해"
 - "내게 맞는 LG U+ 요금제 찾아줘"
 
+- Make sure to think step-by-step when answering
+
 다음 JSON 형식으로 응답하세요:
 
 {{
@@ -240,7 +215,7 @@ def get_recommendation_intent_prompt(input: str):
 
 이것이 추천 의도를 나타냅니까?
 
-다음 형식에 엄격하게 맞춰 응답하세요:
+다음 형식에 엄격하게 JSON 형식으로 맞춰 응답하세요:
 {{
   "is_recommendation_intent": true
 }}"""
@@ -260,12 +235,15 @@ def get_non_recommendation_prompt(content: str):
 - 추천을 강요하지 마세요.
 - 사용자의 니즈를 캐주얼하고 따뜻한 어조로 되물어 주세요.
 - 필요한 경우 사용자 정보(나이, 데이터 사용량 등)를 반영하세요.
+- Make sure to think step-by-step when answering
+
 """
         ),
         HumanMessagePromptTemplate.from_template(
             f"""# 사용자 멀티턴 메시지
 \"\"\"{{content}}\"\"\"
 
+- think about it step-by-step
 위 내용을 기반으로 사용자가 추천을 요청하도록 자연스럽게 유도하는 한국어 답변을 작성해 주세요."""
         )
     ])
@@ -283,6 +261,9 @@ def get_recommendation_prompt(user_info_text: str, plan_texts: str, user_questio
    [[RECOMMENDATION_LIST]]
 4. 위 형식 이후에는 절대로 요금제 이름이나 가격 등의 정보 추가 설명 금지
 5. 마지막 문장은 '보다 정확한 추천을 원하신다면 사용 목적이나 선호 조건을 더 알려주세요!'로 고정합니다.
+
+- Make sure to think step-by-step when answering
+
 """
         ),
         HumanMessagePromptTemplate.from_template(
@@ -295,6 +276,7 @@ def get_recommendation_prompt(user_info_text: str, plan_texts: str, user_questio
 # 후보 요금제
 {plan_texts}
 
+- think about it step-by-step
 위 정보를 기반으로 가장 적절한 요금제를 추천해 주세요."""
         )
     ])
@@ -303,3 +285,74 @@ def get_recommendation_prompt(user_info_text: str, plan_texts: str, user_questio
         plan_texts=plan_texts,
         user_question=user_question
     )
+
+def get_keywords_prompt(input: str):
+    return ChatPromptTemplate.from_messages([
+        SystemMessagePromptTemplate.from_template(
+            """당신은 사용자의 질문에서 요금제 추천을 위한 핵심 키워드를 추출하는 어시스턴트입니다.
+
+다음의 형식으로 정확하게 JSON 키값을 유지한 채 출력해야 합니다.
+모든 항목은 실제 사용자 의도에서 추론 가능한 경우에만 포함시키세요.
+
+출력 예시 (JSON 형식, ⚠️ key와 value의 값 절대 변경 금지):
+{{
+  "social_category": [
+    "",
+    "all",
+    "kids",
+    "senior",
+    "soldier",
+    "teen",
+    "young",
+    "youth"
+  ],
+  "data_category": [
+    "web, kakaotalk",
+    "web, kakaotalk, music",
+    "web, kakaotalk, music, video, game"
+  ],
+  "device_type": [
+    "",
+    "5G 스마트폰",
+    "LTE 전용 태블릿, 빔, 액션캠 등 스마트기기",
+    "스마트워치",
+    "키즈워치"
+  ],
+  "data_sharing": [
+    "",
+    "가능",
+    "불가능"
+  ],
+  "benefit_keywords": [
+    "U+ 모바일 TV 기본 월정액 무료",
+    "U+ 모바일 TV 라이트 무료",
+    "U+멤버십 VIP 등급 혜택",
+    "U⁺ 모바일tv 기본 월정액 무료",
+    "데이터 나눠쓰기",
+    "로밍 혜택",
+    "미디어 서비스 기본 제공",
+    "바이브 300회 음악감상",
+    "바이브 앱 음악감상",
+    "실버지킴이",
+    "원넘버(워치에서도 휴대폰과 같은 번호를 사용 할 수 있는 서비스)",
+    "월정액 할인",
+    "참 쉬운 가족 결합",
+    "태블릿/스마트기기 월정액 할인",
+    "프리미엄 서비스 기본 제공",
+    "프리미엄 서비스 기본 제공(택1) : 삼성팩, 애플디바이스팩, 멀티팩(아이들나라 스탠다드+러닝, 바이브 음악감상, 지니뮤직 음악감상, 밀리의 서재 중 1개 선택)",
+    "피싱/해킹 안심서비스 무료 이용 프로모션"
+  ]
+}}
+"""
+        ),
+        HumanMessagePromptTemplate.from_template(
+            """# 사용자 질문:
+\"\"\"{input}\"\"\"
+
+위 사용자 질문에 포함된 요금제 관련 키워드를 추출해 주세요.
+
+⚠️ 출력은 반드시 위에서 제시한 JSON 형식을 따르며,
+키 이름은 변경하지 말고, 존재하지 않는 항목은 생략해 주세요.
+"""
+        )
+    ]).format_prompt(input=input)
