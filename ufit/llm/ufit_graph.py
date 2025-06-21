@@ -193,7 +193,7 @@ def respond_to_non_recommendation_intent_node(state: State):
 def extract_plan_dto(doc, default_name):
     metadata = doc.metadata or {}
     return PlanDTO(
-        planId=metadata.get("plan_id", f"요금제ID {default_name}"),
+        planId=metadata.get("mongo_id", f"요금제ID {default_name}"),
         name=metadata.get("plan_name", f"요금제 {default_name}")
     )
 
