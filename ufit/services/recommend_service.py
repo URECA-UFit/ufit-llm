@@ -31,11 +31,14 @@ def run_ufit_graph(
 
     initial_state: State = {
         "messages": history.messages,
+        "history": history,
         "content": content,
         "rewriten_content": content,
         "is_safe": False,
+        "is_other_carrier": False,
         "is_rateplan_related": False,
         "is_recommendation_intent": False,
+        "is_my_recommend": False,
         "user_info": user_info,
         "a_plan": PlanDTO(planId="", name=""),
         "b_plan": PlanDTO(planId="", name=""),
@@ -43,8 +46,6 @@ def run_ufit_graph(
     }
 
     state = ufit_graph.invoke(initial_state)
-    history.add_user_message(state["content"])
-    history.add_ai_message(state["answer"])
 
     # response 가공
     chat_bot_messages = mongo_db.get_collection("chat_bot_messages")
@@ -79,8 +80,6 @@ def run_ufit_graph(
         answer_type = AnswerType.GENERAL
     else:
         answer_type = AnswerType.RECOMMEND
-
-    print(state["answer"])
 
     answer = RecommendResponse(
         messageId=str(message_id),

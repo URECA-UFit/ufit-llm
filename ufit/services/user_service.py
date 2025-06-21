@@ -99,9 +99,8 @@ def stringify_user_full_info(user: UserFullInfoDTO) -> str:
 
     device_str = ", ".join([f"{d.device_name} ({d.data_type})" for d in user.devices]) or "없음"
     call_str = ", ".join([f"{u.usage_month.strftime('%Y-%m')}에 {u.usage_amount}분" for u in user.call_usages]) or "없음"
-    data_str = ", ".join([f"{u.usage_month.strftime('%Y-%m')}에 {u.usage_amount}MB" for u in user.data_usages]) or "없음"
+    data_str = ", ".join([f"{u.usage_month.strftime('%Y-%m')}에 {u.usage_amount}GB" for u in user.data_usages]) or "없음"
     sms_str = ", ".join([f"{u.usage_month.strftime('%Y-%m')}에 {u.usage_amount}건" for u in user.sms_usages]) or "없음"
-    current_plan = user.rate_plan.plan_name
 
     return (
         f"사용자 정보:\n"
@@ -112,5 +111,4 @@ def stringify_user_full_info(user: UserFullInfoDTO) -> str:
         f"- 최근 통화 사용량: {call_str}\n"
         f"- 최근 데이터 사용량: {data_str}\n"
         f"- 최근 문자 사용량: {sms_str}\n\n"
-        f"현재 사용 중인 요금제 정보:\n{current_plan}"
     )

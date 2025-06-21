@@ -10,14 +10,13 @@ if not OPENAI_API_KEY:
     raise ValueError("OPENAI_API_KEY is not set")
 os.environ["OPENAI_API_KEY"] = OPENAI_API_KEY
 
-
 embedding_model = OpenAIEmbeddings(model="text-embedding-3-small")
 
 def get_openai_model(temperature: float = 0.0, max_token: int = 256, streaming: bool = False):
     return ChatOpenAI(
         model_name="gpt-4",
         temperature=temperature,
-        max_token=max_token,
+        max_tokens=max_token,
         streaming=streaming,
     )
 
@@ -29,4 +28,6 @@ def get_anthropic_model(temperature: float = 0.0, max_token: int = 256, streamin
         streaming=streaming,
     )
 
+def get_llm_model(temperature: float = 0.0, max_token: int = 256, streaming: bool = False):
+    return get_anthropic_model(temperature,max_token,streaming)
 
