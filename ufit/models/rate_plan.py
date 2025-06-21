@@ -13,7 +13,7 @@ class RatePlan(BaseModel):
     data_allowance: Optional[str] = None
     voice_allowance: Optional[str] = None
     sms_allowance: Optional[str] = None
-    basic_benefit: Dict[str, Any]
+    basic_benefit: Optional[Dict[str, Any]] = None
     is_enabled: bool
     is_deleted: bool
 
