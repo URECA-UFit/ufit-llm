@@ -67,26 +67,99 @@ def get_safe_query_prompt(input: str):
     ])
     return prompt.format_prompt(input=input)
 
+
+
+def get_other_carrier_prompt(input: str):
+    """
+    사용자 질문이 LG U+ 외 타 통신사와 관련이 있는지 판단하는 프롬프트를 생성합니다.
+    """
+    prompt = ChatPromptTemplate.from_messages([
+        SystemMessagePromptTemplate.from_template(
+            """당신은 사용자의 질문이 LG U+ 외의 SKT, KT, 알뜰폰과 관련된 질문인지 판단하는 분류 어시스턴트입니다.
+
+다음과 같은 경우 "타 통신사 관련 질문"으로 판단하세요. **반드시 SKT, KT, 알뜰폰의 요금제만 비교**합니다.:
+
+**타 통신사 관련 질문의 예시:**
+1. **SKT, KT 관련 질문:**
+   - "SKT 요금제 추천해줘"
+   - "KT 무제한 요금제가 궁금해"
+   - "SKT vs LG U+ 비교해줘"
+   - "KT 5G 요금제는 어때?"
+
+2. **알뜰폰/MVNO 관련 질문:**
+   - "알뜰폰 추천해줘"
+   - "헬로모바일 요금제는 어때?"
+   - "티모바일 요금제 궁금해"
+   - "알뜰폰이 더 저렴할까?"
+
+3. **타 통신사와의 비교 질문:**
+   - "SKT랑 LG U+ 중 뭐가 나아?"
+   - "다른 통신사 요금제도 비교해줘"
+   - "KT로 옮기는 게 나을까?"
+
+**LG U+ 관련 질문 (타 통신사 아님):**
+- "LG U+ 요금제 추천해줘"
+- "U+ 5G 요금제는 어때?"
+- "유플러스 무제한 요금제 궁금해"
+- "내게 맞는 LG U+ 요금제 찾아줘"
+
+다음 JSON 형식으로 응답하세요:
+
+{{
+  "is_other_carrier": true
+}}"""
+        ),
+        HumanMessagePromptTemplate.from_template(
+            """사용자의 질문은 다음과 같습니다:
+
+\"\"\"{input}\"\"\"
+
+이 질문이 LG U+ 외 타 통신사와 관련된 질문입니까?
+
+## 출력 형식 (JSON)
+{{
+  "is_other_carrier": true
+}}
+출력 형식을 엄격하게 준수해야 합니다."""
+        )
+    ])
+    return prompt.format_prompt(input=input)
+
+
 def get_rewrite_query_prompt(chat_history: List[BaseMessage], input: str):
     prompt = ChatPromptTemplate.from_messages([
-    MessagesPlaceholder(variable_name="chat_history"),  # 과거 메시지 (List[BaseMessage])
-    SystemMessagePromptTemplate.from_template(
-        """
-당신은 마지막 질문을 사용자의 **과거 대화를 바탕으로 요약 해서 문맥에 맞게 다시 작성**해야 합니다 AI답변은 최대한 배제하고 HUMAN 질문 위주로 파악해주세요.
-- AI의 답변에서 얻은 요금제 정보를 **절대 사용하지 마세요.**
-- Make sure to think step-by-step when answering
+        MessagesPlaceholder(variable_name="chat_history"),  # 과거 메시지
+        SystemMessagePromptTemplate.from_template(
+            """
+당신은 이전 대화(사용자 질문들)를 **자연스럽고 간결한 형태로 상황을 요약**하는 역할을 맡고 있습니다. AI의 질문은 절대로 사용하지 마세요!
 
-        """
-    ),
-    HumanMessagePromptTemplate.from_template(
-        """사용자의 마지막 질문: {input}
-- 반드시 요약한 내용만 출력하세요.
-        """
-    )
-])
-    return prompt.format_messages(chat_history=chat_history, input = input)
-    
-def get_rateplan_related_prompt(input: str):
+다음 규칙을 반드시 지켜주세요:
+- **AI의 답변은 절대 사용하지 말고**, 사용자 발화만 바탕으로 작성하세요.
+- 과거 사용자 메시지를 요약하여 **"과거 상황"**으로 표현하고,
+  마지막 질문은 **"사용자의 메시지"**로 그대로 또는 자연스럽게 재작성하세요.
+- **요약은 간결하게**, 핵심만 담고 문장은 자연스럽게 작성합니다.
+- **마지막 질문에 요금제 추천 요청이 없으면, 추천을 포함하지 말 것.**
+- 질문 의도가 모호하면 마지막 질문만 "사용자의 메시지"에 그대로 넣으세요.
+
+출력 예시:
+과거 상황: "데이터 사용량이 많고 통화도 자주 하는 상황"
+사용자의 메시지: "어떤 요금제가 좋을까?"
+"""
+        ),
+        HumanMessagePromptTemplate.from_template(
+            """
+사용자의 마지막 질문:
+\"\"\"{input}\"\"\"
+
+위의 지침에 따라 최종 재작성된 질문을 출력하세요.
+사용자의 메시지는 {input}이 그대로 나와야합니다.
+"""
+        )
+    ])
+    return prompt.format_prompt(chat_history=chat_history, input=input)
+
+
+def get_is_rateplan_related_prompt(input: str):
     """
     사용자 질문이 요금제와 관련이 있는지 분류하는 프롬프트를 생성합니다.
     """
@@ -127,65 +200,31 @@ def get_rateplan_related_prompt(input: str):
     ])
     return prompt.format_prompt(input=input)
 
-def get_other_carrier_prompt(input: str):
-    """
-    사용자 질문이 LG U+ 외 타 통신사와 관련이 있는지 판단하는 프롬프트를 생성합니다.
-    """
+
+def get_unrelated_rateplan_prompt(input: str):
     prompt = ChatPromptTemplate.from_messages([
         SystemMessagePromptTemplate.from_template(
-            """당신은 사용자의 질문이 LG U+ 외 타 통신사(SKT, KT, 알뜰폰 등)와 관련된 질문인지 판단하는 분류 어시스턴트입니다.
+            UFIT_COMMON_STYLE+"""
+현재 상황은 사용자가 휴대폰 요금제와 관련 없는 질문을 했을 때입니다.
 
-다음과 같은 경우 "타 통신사 관련 질문"으로 판단하세요:
+- 해당 질문에 요금제 추천 챗봇으로써 알려줄 수있는 말은 하고 해야할 말은 하지 않습니다.
+- 요금제 관련 질문을 유도하는 답변을 정중하고 자연스럽게 작성하세요.
+- "~입니다", "~하실 수 있습니다" 등의 정중한 표현을 사용하세요.
 
-**타 통신사 관련 질문의 예시:**
-1. **SKT, KT 관련 질문:**
-   - "SKT 요금제 추천해줘"
-   - "KT 무제한 요금제가 궁금해"
-   - "SKT vs LG U+ 비교해줘"
-   - "KT 5G 요금제는 어때?"
-
-2. **알뜰폰/MVNO 관련 질문:**
-   - "알뜰폰 추천해줘"
-   - "헬로모바일 요금제는 어때?"
-   - "티모바일 요금제 궁금해"
-   - "알뜰폰이 더 저렴할까?"
-
-3. **타 통신사와의 비교 질문:**
-   - "SKT랑 LG U+ 중 뭐가 나아?"
-   - "다른 통신사 요금제도 비교해줘"
-   - "KT로 옮기는 게 나을까?"
-
-**LG U+ 관련 질문 (타 통신사 아님):**
-- "LG U+ 요금제 추천해줘"
-- "U+ 5G 요금제는 어때?"
-- "유플러스 무제한 요금제 궁금해"
-- "내게 맞는 LG U+ 요금제 찾아줘"
-
-- Make sure to think step-by-step when answering
-
-다음 JSON 형식으로 응답하세요:
-
-{{
-  "is_other_carrier": true
-}}"""
+- 모든 사용자의 질문은 휴대폰 요금제와 관련이 없습니다.
+- 요금제 관련 질문을 유도하는 응답을 작성해 주세요.
+"""
         ),
         HumanMessagePromptTemplate.from_template(
-            """사용자의 질문은 다음과 같습니다:
+            """사용자 질문:
+{input}
 
-\"\"\"{input}\"\"\"
-
-이 질문이 LG U+ 외 타 통신사와 관련된 질문입니까?
-
-## 출력 형식 (JSON)
-{{
-  "is_other_carrier": true
-}}
-출력 형식을 엄격하게 준수해야 합니다."""
+"""
         )
     ])
-    return prompt.format_prompt(input=input)
+    return prompt.format_prompt(input = input)
 
-def get_recommendation_intent_prompt(input: str):
+def get_is_recommendation_intent_prompt(input: str):
     """
     사용자가 요금제 추천을 원하는지 의도를 파악하는 프롬프트를 생성합니다.
     """
@@ -203,10 +242,26 @@ def get_recommendation_intent_prompt(input: str):
 
 이것들은 예시일 뿐입니다. 의미적으로 유사하거나 다르게 표현된 문구도 고려하세요.
 
+2. 그리고 다음 조건을 **모두 만족**하면 `"is_my_recommend": true`로 분류하세요:
+- 과거상황을 배제하고 사용자 메시지에 **사용자 자신("나", "내")을 명시**해야 합니다.
+- 그리고 **자신의 통신 습관, 사용 패턴, 통신 성향 등을 '분석'하거나 '고려'해서 추천해달라**는 표현이 포함되어야 합니다.
+
+❗ 단순히 "나에게 맞는 요금제 추천해줘"는 `false`로 분류합니다.
+❗ "요금제 추천해줘"도 `false`입니다.
+
+예시:
+- "나의 통신 성향을 분석해서 요금제 추천해줘" → ✅ `is_my_recommend: true`
+- "내 데이터 사용량에 맞는 요금제 추천해줘" → ✅
+- "요금제 추천해줘" → ❌
+- "엄마 요금제 추천해줘" → ❌
+
+
+**반드시 아래 형식의 JSON만 출력하세요.**
 
 출력 형식 (JSON만 해당):
 {{
-  "is_recommendation_intent": true
+  "is_recommendation_intent": true,
+  "is_my_recommend": true
 }}"""
         ),
         HumanMessagePromptTemplate.from_template(
@@ -217,7 +272,8 @@ def get_recommendation_intent_prompt(input: str):
 
 다음 형식에 엄격하게 JSON 형식으로 맞춰 응답하세요:
 {{
-  "is_recommendation_intent": true
+  "is_recommendation_intent": true,
+  "is_my_recommend": true
 }}"""
         )
     ])
@@ -235,6 +291,8 @@ def get_non_recommendation_prompt(content: str):
 - 추천을 강요하지 마세요.
 - 사용자의 니즈를 캐주얼하고 따뜻한 어조로 되물어 주세요.
 - 필요한 경우 사용자 정보(나이, 데이터 사용량 등)를 반영하세요.
+- "~입니다. ~요청합니다."등의 어투로 끝나는 것보다 질문을 하는 식으로 답변하세요.
+- 명시적으로 요금제 추천은 절대하지 마세요.
 - Make sure to think step-by-step when answering
 
 """
@@ -256,7 +314,7 @@ def get_recommendation_prompt(user_info_text: str, plan_texts: str, user_questio
 
 다음 조건을 반드시 지켜서 답변하세요:
 1. '안녕하세요. 고객님의 사용 패턴을 분석해보았습니다.'로 시작합니다.
-2. 어떤 이유로 해당 요금제를 추천하는지 설명합니다.
+2. 어떤 이유로 해당 요금제를 추천하는지 설명합니다. 과거 상황은 멀티턴 용 요약본이고, 사용자의 메시지기반으로 설명합니다.
 3. 프론트에서 요금제 카드를 렌더링할 수 있도록 아래 형식만 단독으로 출력합니다 (중괄호, 대괄호 등 제거):
    [[RECOMMENDATION_LIST]]
 4. 위 형식 이후에는 절대로 요금제 이름이나 가격 등의 정보 추가 설명 금지
@@ -289,59 +347,53 @@ def get_recommendation_prompt(user_info_text: str, plan_texts: str, user_questio
 def get_keywords_prompt(input: str):
     return ChatPromptTemplate.from_messages([
         SystemMessagePromptTemplate.from_template(
-            """당신은 사용자의 질문에서 요금제 추천을 위한 핵심 키워드를 추출하는 어시스턴트입니다.
+            """당신은 사용자의 질문에서 LG U+ 요금제 추천을 위한 핵심 키워드를 추출하는 어시스턴트입니다.
 
-다음의 형식으로 정확하게 JSON 키값을 유지한 채 출력해야 합니다.
-모든 항목은 실제 사용자 의도에서 추론 가능한 경우에만 포함시키세요.
+다음의 명세에 따라 **정확히 JSON 형식**으로 출력해야 합니다.  
+키 이름, 값은 절대로 변경하지 말고, 설명이나 주석도 절대 추가하지 마세요.
 
-출력 예시 (JSON 형식, ⚠️ key와 value의 값 절대 변경 금지):
+각 항목은 리스트 형태의 값으로 출력되며, **반드시 최대 1개의 값만** 포함됩니다.  
+명확한 값이 없으면  ""스트링으로 출력하세요.
+
+[📌 선택 가능한 값 목록]
+- "social_category": "all", "kids", "senior", "soldier", "teen", "young", "youth"
+- "data_category": 
+    - "web, kakaotalk"
+    - "web, kakaotalk, music"
+    - "web, kakaotalk, music, video, game"
+- "device_type":
+    - "5G 스마트폰"
+    - "LTE 전용 태블릿, 빔, 액션캠 등 스마트기기"
+    - "스마트워치"
+    - "키즈워치"
+- "data_sharing": "가능", "불가능"
+- "benefit_keywords":
+    - "U+ 모바일 TV 기본 월정액 무료"
+    - "U+ 모바일 TV 라이트 무료"
+    - "U+멤버십 VIP 등급 혜택"
+    - "U⁺ 모바일tv 기본 월정액 무료"
+    - "데이터 나눠쓰기"
+    - "로밍 혜택"
+    - "미디어 서비스 기본 제공"
+    - "바이브 300회 음악감상"
+    - "바이브 앱 음악감상"
+    - "실버지킴이"
+    - "원넘버(워치에서도 휴대폰과 같은 번호를 사용 할 수 있는 서비스)"
+    - "월정액 할인"
+    - "참 쉬운 가족 결합"
+    - "태블릿/스마트기기 월정액 할인"
+    - "프리미엄 서비스 기본 제공"
+    - "프리미엄 서비스 기본 제공(택1) : 삼성팩, 애플디바이스팩, 멀티팩(아이들나라 스탠다드+러닝, 바이브 음악감상, 지니뮤직 음악감상, 밀리의 서재 중 1개 선택)"
+    - "피싱/해킹 안심서비스 무료 이용 프로모션"
+
+⚠️ 출력 예시 (오직 아래 형식으로 출력하세요):
+```json
 {{
-  "social_category": [
-    "",
-    "all",
-    "kids",
-    "senior",
-    "soldier",
-    "teen",
-    "young",
-    "youth"
-  ],
-  "data_category": [
-    "web, kakaotalk",
-    "web, kakaotalk, music",
-    "web, kakaotalk, music, video, game"
-  ],
-  "device_type": [
-    "",
-    "5G 스마트폰",
-    "LTE 전용 태블릿, 빔, 액션캠 등 스마트기기",
-    "스마트워치",
-    "키즈워치"
-  ],
-  "data_sharing": [
-    "",
-    "가능",
-    "불가능"
-  ],
-  "benefit_keywords": [
-    "U+ 모바일 TV 기본 월정액 무료",
-    "U+ 모바일 TV 라이트 무료",
-    "U+멤버십 VIP 등급 혜택",
-    "U⁺ 모바일tv 기본 월정액 무료",
-    "데이터 나눠쓰기",
-    "로밍 혜택",
-    "미디어 서비스 기본 제공",
-    "바이브 300회 음악감상",
-    "바이브 앱 음악감상",
-    "실버지킴이",
-    "원넘버(워치에서도 휴대폰과 같은 번호를 사용 할 수 있는 서비스)",
-    "월정액 할인",
-    "참 쉬운 가족 결합",
-    "태블릿/스마트기기 월정액 할인",
-    "프리미엄 서비스 기본 제공",
-    "프리미엄 서비스 기본 제공(택1) : 삼성팩, 애플디바이스팩, 멀티팩(아이들나라 스탠다드+러닝, 바이브 음악감상, 지니뮤직 음악감상, 밀리의 서재 중 1개 선택)",
-    "피싱/해킹 안심서비스 무료 이용 프로모션"
-  ]
+  "social_category": "youth",
+  "data_category": "web, kakaotalk, music",
+  "device_type": "5G 스마트폰",
+  "data_sharing": "불가능",
+  "benefit_keywords": "로밍 혜택"
 }}
 """
         ),

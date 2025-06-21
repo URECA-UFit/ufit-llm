@@ -38,8 +38,8 @@ def run_ufit_graph(
         "is_other_carrier": False,
         "is_rateplan_related": False,
         "is_recommendation_intent": False,
+        "is_my_recommend": False,
         "user_info": user_info,
-        "keywords": {},
         "a_plan": PlanDTO(planId="", name=""),
         "b_plan": PlanDTO(planId="", name=""),
         "answer": "",
@@ -80,8 +80,6 @@ def run_ufit_graph(
         answer_type = AnswerType.GENERAL
     else:
         answer_type = AnswerType.RECOMMEND
-
-    print(state["answer"])
 
     answer = RecommendResponse(
         messageId=str(message_id),

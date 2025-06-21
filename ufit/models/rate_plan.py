@@ -1,6 +1,5 @@
 from typing import Optional, Dict, Any
-from datetime import datetime, timezone
-from pydantic import BaseModel, Field
+from pydantic import BaseModel
 from bson import ObjectId
 
 
@@ -13,7 +12,9 @@ class RatePlan(BaseModel):
     data_allowance: Optional[str] = None
     voice_allowance: Optional[str] = None
     sms_allowance: Optional[str] = None
-    basic_benefit: Optional[Dict[str, Any]] = None
+    basic_benefit: Dict[str, Any] = None
+    special_benefit: Optional[Dict[str, Any]] = None
+    discount_benefit: Optional[Dict[str, Any]] = None
     is_enabled: bool
     is_deleted: bool
 

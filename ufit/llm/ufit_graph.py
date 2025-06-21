@@ -1,37 +1,22 @@
-#[START]
-#  ↓
-#[is_safe_query_node]
-#  ├─ False → [respond_to_unsafe_query_node] → END
-#  └─ True  → [is_other_carrier_query_node]
-#                  ├─ True → [respond_to_other_carrier_query_node] → END
-#                  └─ False → [rewrite_query_node]
-#                                ↓
-#                      [is_rateplan_related_query_node]
-#                        ├─ False → [respond_to_unrelated_rateplan_query_node] → END
-#                        └─ True → [is_recommendation_intent_node]
-#                                     ├─ False → [respond_to_non_recommendation_intent_node] → END
-#                                     └─ True  → [make_keywords_query_node] -> [respond_to_recommendation_intent_node] → END
-
 import os,json
 from ufit.services.user_service import stringify_user_full_info
 from ufit.dto.user_info import UserFullInfoDTO
 from IPython.display import Image, display
-from pymongo.database import Database
 from langchain_community.chat_message_histories import MongoDBChatMessageHistory
 
 from langchain_core.messages import BaseMessage
 from langchain_community.vectorstores import PGVector
-from langchain.schema import AIMessage,HumanMessage
+from langchain.schema import AIMessage
 from typing import Annotated, TypedDict, Dict, Any
 from langgraph.graph import StateGraph, START, END
 from langgraph.graph.message import add_messages
 from ufit.dto.recommend import PlanDTO
-from langchain_teddynote.graphs import visualize_graph
-from ufit.llm.llm_model import get_anthropic_model, embedding_model, get_openai_model
+from ufit.llm.llm_model import get_llm_model, embedding_model, get_openai_model
 from ufit.llm.ufit_graph_prompt import (
     get_safe_query_prompt,
-    get_rateplan_related_prompt,
-    get_recommendation_intent_prompt,
+    get_is_rateplan_related_prompt,
+    get_unrelated_rateplan_prompt,
+    get_is_recommendation_intent_prompt,
     get_recommendation_prompt,
     get_non_recommendation_prompt,
     get_other_carrier_prompt,
@@ -48,7 +33,7 @@ vectorstore = PGVector(
     connection_string = PGVECTOR_CONNECTIONS_STRING
 )
 
-NUM_OF_RECOMMEND_PLAN = 2 
+NUM_OF_RECOMMEND_PLAN = 5
 MAX_TURNS = 5
 
 respond_to_unsafe_query = "죄송합니다. 해당 요청은 서비스 이용 정책에 따라 처리할 수 없습니다.\n다른 질문을 해주세요."
@@ -67,6 +52,7 @@ class State(TypedDict):
     is_other_carrier: bool
     is_rateplan_related: bool
     is_recommendation_intent: bool
+    is_my_recommend: bool
     user_info: UserFullInfoDTO
     keywords: Dict[str, Any] 
     a_plan: PlanDTO
@@ -79,7 +65,7 @@ class State(TypedDict):
 def is_safe_query_node(state: State):
 
     prompt = get_safe_query_prompt(input=state["content"])
-    response = get_anthropic_model(temperature=0.0, max_token=100).invoke(prompt.to_messages())
+    response = get_llm_model(temperature=0.0, max_token=100).invoke(prompt.to_messages())
     
     try:
         result = json.loads(response.content)
@@ -95,18 +81,42 @@ def is_safe_query_node(state: State):
 
 # 금칙어 질문에 응답 반환하는 노드(정적 대답)"""
 def respond_to_unsafe_query_node(state: State):
+    result = respond_to_unsafe_query
     return {
-        "answer": respond_to_unsafe_query,
-        "messages": [AIMessage(content=respond_to_unsafe_query)]
+        "answer": result,
+        "messages": [AIMessage(content=result)]
+    }
+
+# 타 통신사 질문인지 판단하는 노드
+def is_other_carrier_query_node(state: State):
+    content = state["rewriten_content"]
+
+    prompt = get_other_carrier_prompt(content)
+    response = get_llm_model(temperature=0.1, max_token=100).invoke(prompt.to_messages())
+
+    try:
+        result = json.loads(response.content)
+        is_other_carrier = result["is_other_carrier"]
+    except Exception:
+        is_other_carrier = False  # 파싱 실패 시 기본값
+
+    return {
+        "is_other_carrier": is_other_carrier
+    }
+
+# 타 통신사 질문에 응답 반환하는 노드(정적 대답)
+def respond_to_other_carrier_query_node(state: State):
+    return {
+        "answer": respond_to_other_carrier_query,
+        "messages": [AIMessage(content=respond_to_other_carrier_query)]
     }
 
 # 멀티턴을 위해 사용자 질문을 정제하는 노드
 def rewrite_query_node(state: State):
     prompt = get_rewrite_query_prompt(state["messages"][-5:],state["content"])
-    response = get_openai_model(temperature=0.5, max_token=500).invoke(prompt)
-    print(prompt)
+    response = get_llm_model(temperature=0.5, max_token=500).invoke(prompt)
+    
     rewriten_content = response.content
-    print(rewriten_content)
     return {
         "rewriten_content": rewriten_content
     }
@@ -115,9 +125,9 @@ def rewrite_query_node(state: State):
 def is_rateplan_related_query_node(state: State):
     content = state["rewriten_content"]
     
-    prompt = get_rateplan_related_prompt(content)
-    response = get_anthropic_model(temperature=0.1, max_token=100).invoke(prompt.to_messages())
-    print(response)
+    prompt = get_is_rateplan_related_prompt(content)
+    response = get_llm_model(temperature=0.0, max_token=100).invoke(prompt.to_messages())
+    
     try:
         result = json.loads(response.content)
         is_related = result["is_rateplan_related"]
@@ -129,33 +139,41 @@ def is_rateplan_related_query_node(state: State):
     }
 
 
-# 요금제 관련 없는 질문에 응답 반환하는 노드(정적 대답)"""
+# 요금제 관련 없는 질문에 응답을 반환하는 노드(LLM 대답)"""
 def respond_to_unrelated_rateplan_query_node(state: State):
+    prompt = get_unrelated_rateplan_prompt(state["rewriten_content"])
+
+    response = get_llm_model(temperature=0.5, max_token=800).invoke(prompt)
+
+    result = response.content
+    
     return {
-        "answer": respond_to_unrelated_rateplan_query,
-        "messages": [AIMessage(content=respond_to_unrelated_rateplan_query)]
+        "answer": result,
+        "messages": [AIMessage(content=result)]
     }
 
 
 # 추천 의도가 있는지 판단하는 노드
 def is_recommendation_intent_node(state: State):
-    prompt = get_recommendation_intent_prompt(state["rewriten_content"])
+    prompt = get_is_recommendation_intent_prompt(state["rewriten_content"])
     response = get_openai_model(temperature=0.0, max_token=100).invoke(prompt.to_messages())
     try:
         result = json.loads(response.content)
         is_recommendation_intent = result.get("is_recommendation_intent", False)
+        is_my_recommend = result.get("is_my_recommend", False)
     except Exception:
         is_recommendation_intent = False  # 파싱 실패 시 기본값
 
     return {
-        "is_recommendation_intent": is_recommendation_intent
+        "is_recommendation_intent": is_recommendation_intent,
+        "is_my_recommend": is_my_recommend
     }
 
 
 # 추천 의도가 없을 경우의 응답하는 노드(LLM 대답)
 def respond_to_non_recommendation_intent_node(state: State):
     prompt = get_non_recommendation_prompt(state["rewriten_content"])
-    response = get_anthropic_model(temperature=0.05, max_token=1000).invoke(prompt.to_messages())
+    response = get_llm_model(temperature=0.05, max_token=1000).invoke(prompt.to_messages())
 
     try:
         content = response.content
@@ -175,7 +193,7 @@ def respond_to_non_recommendation_intent_node(state: State):
 def extract_plan_dto(doc, default_name):
     metadata = doc.metadata or {}
     return PlanDTO(
-        planId=metadata.get("mongo_id", f"unknown-{default_name}"),
+        planId=metadata.get("plan_id", f"요금제ID {default_name}"),
         name=metadata.get("plan_name", f"요금제 {default_name}")
     )
 
@@ -186,19 +204,22 @@ def respond_to_recommendation_intent_node(state: State):
     else:
         user_text = stringify_user_full_info(state["user_info"])
 
-    docs = vectorstore.similarity_search(state["rewriten_content"], NUM_OF_RECOMMEND_PLAN)
+    if(state["is_my_recommend"] is True and state["user_info"] is not None): text = state["rewriten_content"] + user_text
+    else: text = state["rewriten_content"]
+
+    docs = vectorstore.similarity_search(text, NUM_OF_RECOMMEND_PLAN)
 
     plan_texts = "\n\n".join(
     f"요금제 {i+1}:\n{doc.page_content}" for i, doc in enumerate(docs))
 
     prompt = get_recommendation_prompt(user_text, plan_texts, state["rewriten_content"])
 
-    response = get_anthropic_model(temperature=0.4, max_token=2000).invoke(prompt.to_messages())
-    print(f"📝 plan_texts:\n{plan_texts}")
+    response = get_llm_model(temperature=0.3, max_token=2000).invoke(prompt.to_messages())
+    
 
     a_plan = extract_plan_dto(docs[0], "없음") if len(docs) > 0 else PlanDTO(planId="", name="")
     b_plan = extract_plan_dto(docs[1], "없음") if len(docs) > 1 else PlanDTO(planId="", name="")
-    
+
     
     state["history"].add_user_message(state["content"])
     state["history"].add_ai_message(response.content)
@@ -216,44 +237,18 @@ def make_keywords_query_node(state: State):
     content = state["rewriten_content"]
     prompt = get_keywords_prompt(content)
     
-
-    response = get_anthropic_model(temperature=0.0, max_token=200).invoke(prompt.to_messages())
+    response = get_openai_model(temperature=0.0, max_token=200).invoke(prompt.to_messages())
 
     try:
         result = json.loads(response.content)
     except Exception:
         result = {}
 
-    print(result)
     return{
         "keywords": result
     }
 
 
-
-# 타 통신사 질문인지 판단하는 노드
-def is_other_carrier_query_node(state: State):
-    content = state["rewriten_content"]
-
-    prompt = get_other_carrier_prompt(content)
-    response = get_anthropic_model(temperature=0.1, max_token=100).invoke(prompt.to_messages())
-
-    try:
-        result = json.loads(response.content)
-        is_other_carrier = result["is_other_carrier"]
-    except Exception:
-        is_other_carrier = False  # 파싱 실패 시 기본값
-
-    return {
-        "is_other_carrier": is_other_carrier
-    }
-
-# 타 통신사 질문에 응답 반환하는 노드(정적 대답)
-def respond_to_other_carrier_query_node(state: State):
-    return {
-        "answer": respond_to_other_carrier_query,
-        "messages": [AIMessage(content=respond_to_other_carrier_query)]
-    }
 
 graph_builder = StateGraph(State)
 
