@@ -69,6 +69,9 @@ with open(file_path, "r", encoding="utf-8") as f:
 docs = []
 for plan in plans:
     metadata = extract_metadata_with_claude(plan)
+    # mongo_id와 plan_name 추가
+    metadata["mongo_id"] = plan["_id"]
+    metadata["plan_name"] = plan["plan_name"]
     docs.append(
         Document(
             page_content=generate_final_output(plan),
