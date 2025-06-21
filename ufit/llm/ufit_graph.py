@@ -175,7 +175,7 @@ def respond_to_non_recommendation_intent_node(state: State):
 def extract_plan_dto(doc, default_name):
     metadata = doc.metadata or {}
     return PlanDTO(
-        planId=metadata.get("plani_id", f"unknown-{default_name}"),
+        planId=metadata.get("mongo_id", f"unknown-{default_name}"),
         name=metadata.get("plan_name", f"요금제 {default_name}")
     )
 
@@ -186,7 +186,7 @@ def respond_to_recommendation_intent_node(state: State):
     else:
         user_text = stringify_user_full_info(state["user_info"])
 
-    docs = vectorstore.similarity_search(state["rewriten_content"], NUM_OF_RECOMMEND_PLAN, state["keywords"])
+    docs = vectorstore.similarity_search(state["rewriten_content"], NUM_OF_RECOMMEND_PLAN)
 
     plan_texts = "\n\n".join(
     f"요금제 {i+1}:\n{doc.page_content}" for i, doc in enumerate(docs))
@@ -194,7 +194,7 @@ def respond_to_recommendation_intent_node(state: State):
     prompt = get_recommendation_prompt(user_text, plan_texts, state["rewriten_content"])
 
     response = get_anthropic_model(temperature=0.4, max_token=2000).invoke(prompt.to_messages())
-    print(plan_texts)
+    print(f"📝 plan_texts:\n{plan_texts}")
 
     a_plan = extract_plan_dto(docs[0], "없음") if len(docs) > 0 else PlanDTO(planId="", name="")
     b_plan = extract_plan_dto(docs[1], "없음") if len(docs) > 1 else PlanDTO(planId="", name="")
