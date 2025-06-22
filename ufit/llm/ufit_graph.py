@@ -33,7 +33,7 @@ vectorstore = PGVector(
     connection_string = PGVECTOR_CONNECTIONS_STRING
 )
 
-NUM_OF_RECOMMEND_PLAN = 5
+NUM_OF_RECOMMEND_PLAN = 2
 MAX_TURNS = 5
 
 respond_to_unsafe_query = "죄송합니다. 해당 요청은 서비스 이용 정책에 따라 처리할 수 없습니다.\n다른 질문을 해주세요."
