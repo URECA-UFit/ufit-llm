@@ -30,9 +30,10 @@ vectorstore = PGVector(
     collection_name=COLLECTION_NAME_VECTOR,
 )
 
+
 # 요금제 임베딩
 def embed_single_rateplan(request: callRatePlanRequest):
-    
+
     plan_data = {
         "rateplan_id": request.ratePlanId,
         "plan_name": request.planName,
@@ -53,12 +54,24 @@ def embed_single_rateplan(request: callRatePlanRequest):
     }
     mongo_id = plan_data["rateplan_id"]
 
+    benefit_keywords = list(
+        set(
+            list(request.basicBenefit.values())
+            + list(request.discountBenefit.values())
+            + list(request.specialBenefit.values())
+        )
+    )
     try:
         doc = Document(
             page_content=generate_final_output(plan_data),
             metadata={
                 "mongo_id": mongo_id,
                 "plan_name": plan_data.get("plan_name", ""),
+                "device_type": request.deviceType,
+                "data_sharing": request.dataSharing,
+                "data_category": request.dataCategory,
+                "social_category": request.socialCategory,
+                "benefit_keywords": benefit_keywords,
             },
         )
         vectorstore.add_documents([doc])
@@ -71,13 +84,12 @@ def _acquire_pg_conn(store: PGVector):
     """vectorstore 안에 열린 커넥션이 없으면 엔진에서 새로 연결"""
     conn = getattr(store, "_conn", None) or getattr(store, "_connection", None)
     if conn is not None:
-        return conn, False  # (커넥션, close_needed)
+        return conn, False
 
-    # 일부 버전엔 _engine 속성, 없으면 DSN으로 새 엔진 생성
     engine = getattr(store, "_engine", None) or create_engine(
         PGVECTOR_CONNECTION_STRING
     )
-    return engine.connect(), True  # 새로 열었으니 사용 뒤 close
+    return engine.connect(), True
 
 
 def delete_rateplan_vector(rateplan_id: str):
@@ -91,7 +103,7 @@ def delete_rateplan_vector(rateplan_id: str):
             """
         )
 
-        with conn.begin():  # 트랜잭션
+        with conn.begin():
             result = conn.execute(sql, {"mid": str(rateplan_id)})
 
         print(f"[DEBUG] deleted rows → {result.rowcount}")
