@@ -12,7 +12,7 @@ from langgraph.graph import StateGraph, START, END
 from langgraph.graph.message import add_messages
 from ufit.dto.recommend import PlanDTO
 from ufit.llm.llm_model import get_llm_model, embedding_model, get_openai_model
-from ufit.llm.ufit_graph_prompt import (
+from ufit.llm.ufit_prompt import (
     get_safe_query_prompt,
     get_is_rateplan_related_prompt,
     get_unrelated_rateplan_prompt,
@@ -92,7 +92,7 @@ def is_other_carrier_query_node(state: State):
     content = state["rewriten_content"]
 
     prompt = get_other_carrier_prompt(content)
-    response = get_llm_model(temperature=0.1, max_token=100).invoke(prompt.to_messages())
+    response = get_llm_model(temperature=0.0, max_token=100).invoke(prompt.to_messages())
 
     try:
         result = json.loads(response.content)
@@ -114,7 +114,7 @@ def respond_to_other_carrier_query_node(state: State):
 # 멀티턴을 위해 사용자 질문을 정제하는 노드
 def rewrite_query_node(state: State):
     prompt = get_rewrite_query_prompt(state["messages"][-5:],state["content"])
-    response = get_llm_model(temperature=0.5, max_token=500).invoke(prompt)
+    response = get_llm_model(temperature=0.0, max_token=500).invoke(prompt)
     
     rewriten_content = response.content
     return {
@@ -156,13 +156,14 @@ def respond_to_unrelated_rateplan_query_node(state: State):
 # 추천 의도가 있는지 판단하는 노드
 def is_recommendation_intent_node(state: State):
     prompt = get_is_recommendation_intent_prompt(state["rewriten_content"])
-    response = get_openai_model(temperature=0.0, max_token=100).invoke(prompt.to_messages())
+    response = get_llm_model(temperature=0.0, max_token=100).invoke(prompt.to_messages())
     try:
         result = json.loads(response.content)
         is_recommendation_intent = result.get("is_recommendation_intent", False)
         is_my_recommend = result.get("is_my_recommend", False)
     except Exception:
         is_recommendation_intent = False  # 파싱 실패 시 기본값
+
 
     return {
         "is_recommendation_intent": is_recommendation_intent,
@@ -204,17 +205,27 @@ def respond_to_recommendation_intent_node(state: State):
     else:
         user_text = stringify_user_full_info(state["user_info"])
 
-    if(state["is_my_recommend"] is True and state["user_info"] is not None): text = state["rewriten_content"] + user_text
-    else: text = state["rewriten_content"]
+    if state["is_my_recommend"] and state["user_info"] is not None:
+        base_text = f"{state['rewriten_content']} ({user_text})"
+    else:
+        base_text = state["rewriten_content"]
 
-    docs = vectorstore.similarity_search(text, NUM_OF_RECOMMEND_PLAN)
+    # 키워드 결합
+    if state["keywords"]:
+        keyword_text = " | ".join([f"{k}: {v}" for k, v in state["keywords"].items() if v])
+        retriever_text = f"{base_text}\n관련 키워드: {keyword_text}"
+    else:
+        retriever_text = base_text
 
+    # 유사도 검색
+    docs = vectorstore.similarity_search(retriever_text, NUM_OF_RECOMMEND_PLAN)
+    
     plan_texts = "\n\n".join(
     f"요금제 {i+1}:\n{doc.page_content}" for i, doc in enumerate(docs))
 
     prompt = get_recommendation_prompt(user_text, plan_texts, state["rewriten_content"])
 
-    response = get_llm_model(temperature=0.3, max_token=2000).invoke(prompt.to_messages())
+    response = get_llm_model(temperature=0.2, max_token=2000).invoke(prompt.to_messages())
     
 
     a_plan = extract_plan_dto(docs[0], "없음") if len(docs) > 0 else PlanDTO(planId="", name="")
@@ -222,7 +233,6 @@ def respond_to_recommendation_intent_node(state: State):
 
     
     state["history"].add_user_message(state["content"])
-    state["history"].add_ai_message(response.content)
 
     # 8. 결과 반환
     return {
@@ -237,7 +247,7 @@ def make_keywords_query_node(state: State):
     content = state["rewriten_content"]
     prompt = get_keywords_prompt(content)
     
-    response = get_openai_model(temperature=0.0, max_token=200).invoke(prompt.to_messages())
+    response = get_llm_model(temperature=0.0, max_token=200).invoke(prompt.to_messages())
 
     try:
         result = json.loads(response.content)
