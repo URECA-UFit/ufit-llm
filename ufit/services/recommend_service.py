@@ -1,6 +1,6 @@
 import os
 
-from ufit.services.user_service import get_user_full_info
+from ufit.services.user_service import get_user_info
 from sqlalchemy.orm import Session
 from pymongo.database import Database
 from langchain_mongodb import MongoDBChatMessageHistory
@@ -26,7 +26,7 @@ def run_ufit_graph(
         collection_name="message_histories",
     )
 
-    if(user_id !=-1): user_info = get_user_full_info(user_id, postgre_db, mongo_db)
+    if(user_id !=-1): user_info = get_user_info(user_id, postgre_db, mongo_db)
     else: user_info = None
 
     initial_state: State = {
