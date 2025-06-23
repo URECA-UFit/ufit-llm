@@ -55,7 +55,6 @@ def generate_final_output(plan):
     if social_category:
         lines.append(f"사회적 카테고리는 {social_category}입니다.")
     
-    # 혜택 정보 처리 (딕셔너리 형태)
     if basic_benefit and isinstance(basic_benefit, dict):
         basic_text = ", ".join([f"{k}: {v}" for k, v in basic_benefit.items()])
         if basic_text:

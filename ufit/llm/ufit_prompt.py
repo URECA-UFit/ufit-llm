@@ -124,7 +124,7 @@ def get_other_carrier_prompt(input: str):
 
 def get_rewrite_query_prompt(chat_history: List[BaseMessage], input: str):
     prompt = ChatPromptTemplate.from_messages([
-        MessagesPlaceholder(variable_name="chat_history"),  # 과거 메시지
+        MessagesPlaceholder(variable_name="chat_history"), 
         SystemMessagePromptTemplate.from_template(
             """
 당신은 이전 대화(사용자 질문들)를 **자연스럽고 간결한 형태로 상황을 요약**하는 역할을 맡고 있습니다.

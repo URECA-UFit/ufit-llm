@@ -16,7 +16,7 @@ def run_ufit_graph(
     postgre_db: Session,
     mongo_db: Database,
 ):
-    # run graph
+
     session_id = str(chat_room_id)
     
     history = MongoDBChatMessageHistory(
@@ -47,7 +47,6 @@ def run_ufit_graph(
 
     state = ufit_graph.invoke(initial_state)
 
-    # response 가공
     chat_bot_messages = mongo_db.get_collection("chat_bot_messages")
     save_chat_bot_message(
         collection=chat_bot_messages,
@@ -63,7 +62,6 @@ def run_ufit_graph(
         recommend_plans.append({"planId": a_plan.planId, "name": a_plan.name})
     if b_plan.planId and b_plan.name:
         recommend_plans.append({"planId": b_plan.planId, "name": b_plan.name})
-
 
     message_id = save_chat_bot_message(
         collection=chat_bot_messages,

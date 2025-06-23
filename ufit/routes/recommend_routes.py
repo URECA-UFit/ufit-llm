@@ -5,7 +5,6 @@ from pymongo.database import Database
 from ufit.database.database import get_db, get_mongo_db
 from ufit.dto.recommend import RecommendRequest, RecommendResponse
 
-
 recommend_router = APIRouter()
 
 @recommend_router.post(

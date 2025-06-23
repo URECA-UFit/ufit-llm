@@ -6,7 +6,6 @@ from langchain.prompts import ChatPromptTemplate, HumanMessagePromptTemplate, Sy
 from dotenv import load_dotenv
 from bson.objectid import ObjectId
 
-# 환경 변수 로드 및 LLM 세팅
 load_dotenv()
 CLAUDE_API_KEY = os.getenv("CLAUDE_API_KEY")
 if not CLAUDE_API_KEY:
@@ -18,7 +17,6 @@ llm_model = ChatAnthropic(
     temperature=0.3
 )
 
-# 컬렉션 이름 상수 정의
 CHAT_BOT_MESSAGES_COLLECTION = "chat_bot_messages"
 
 def get_user_queries_after_recommendation(mongo_db: Database, chat_room_id: int, recommendation_message_id_str: str, limit: int = 10) -> List[str]:
@@ -57,7 +55,6 @@ def get_user_queries_after_recommendation(mongo_db: Database, chat_room_id: int,
             break
             
     return user_msgs_to_summarize
-
 
 def summarize_user_queries_with_llm(user_msgs: List[str]) -> str:
     if not user_msgs:
