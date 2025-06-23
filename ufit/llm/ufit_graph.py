@@ -1,6 +1,6 @@
 import os,json
-from ufit.services.user_service import stringify_user_full_info
-from ufit.dto.user_info import UserFullInfoDTO
+from ufit.services.user_service import stringify_user_info, stringfiy_user_rate_plan
+from ufit.dto.user_info import UserInfoDTO
 from IPython.display import Image, display
 from langchain_community.chat_message_histories import MongoDBChatMessageHistory
 
@@ -20,7 +20,6 @@ from ufit.llm.ufit_prompt import (
     get_recommendation_prompt,
     get_non_recommendation_prompt,
     get_other_carrier_prompt,
-    get_keywords_prompt,
     get_rewrite_query_prompt
 )
 
@@ -37,9 +36,7 @@ NUM_OF_RECOMMEND_PLAN = 2
 MAX_TURNS = 5
 
 respond_to_unsafe_query = "죄송합니다. 해당 요청은 서비스 이용 정책에 따라 처리할 수 없습니다.\n다른 질문을 해주세요."
-respond_to_unrelated_rateplan_query = "죄송합니다. 요금제와 관련없는 질문은 답변을 드릴 수가 없네요.\n요금제와 관련된 질문을 해주세요."
 respond_to_other_carrier_query = "죄송합니다. 저는 LG U+ 요금제에 한해 상담을 제공하고 있습니다.\n타 통신사 관련 문의는 답변드릴 수 없습니다."
-respond_to_non_recommendation_intent_if_llm_error= "요금제에 대해 궁금한 점이 있으신가요? 자세히 말씀해 주시면 추천도 도와드릴 수 있어요."
 
 
 # -------- 그래프 상태 정의 --------
@@ -53,8 +50,7 @@ class State(TypedDict):
     is_rateplan_related: bool
     is_recommendation_intent: bool
     is_my_recommend: bool
-    user_info: UserFullInfoDTO
-    keywords: Dict[str, Any] 
+    user_info: UserInfoDTO
     a_plan: PlanDTO
     b_plan: PlanDTO
     answer: str
@@ -175,12 +171,8 @@ def is_recommendation_intent_node(state: State):
 def respond_to_non_recommendation_intent_node(state: State):
     prompt = get_non_recommendation_prompt(state["rewriten_content"])
     response = get_llm_model(temperature=0.05, max_token=1000).invoke(prompt.to_messages())
-
-    try:
-        content = response.content
-    except Exception:
-        content = respond_to_non_recommendation_intent_if_llm_error
-
+    content = response.content
+    
     state["history"].add_user_message(state["content"])
     state["history"].add_ai_message(response.content)
 
@@ -202,20 +194,16 @@ def respond_to_recommendation_intent_node(state: State):
     
     if state["user_info"] is None:
         user_text = "비회원"
+        user_rate_plan_text = "비회원"
     else:
-        user_text = stringify_user_full_info(state["user_info"])
+        user_text = stringify_user_info(state["user_info"])
+        user_rate_plan_text = stringfiy_user_rate_plan(state["user_info"])
 
     if state["is_my_recommend"] and state["user_info"] is not None:
-        base_text = f"{state['rewriten_content']} ({user_text})"
+        retriever_text = f"{state['rewriten_content']} ({user_text})"
     else:
-        base_text = state["rewriten_content"]
+        retriever_text = state["rewriten_content"]
 
-    # 키워드 결합
-    if state["keywords"]:
-        keyword_text = " | ".join([f"{k}: {v}" for k, v in state["keywords"].items() if v])
-        retriever_text = f"{base_text}\n관련 키워드: {keyword_text}"
-    else:
-        retriever_text = base_text
 
     # 유사도 검색
     docs = vectorstore.similarity_search(retriever_text, NUM_OF_RECOMMEND_PLAN)
@@ -223,7 +211,7 @@ def respond_to_recommendation_intent_node(state: State):
     plan_texts = "\n\n".join(
     f"요금제 {i+1}:\n{doc.page_content}" for i, doc in enumerate(docs))
 
-    prompt = get_recommendation_prompt(user_text, plan_texts, state["rewriten_content"])
+    prompt = get_recommendation_prompt(user_text, user_rate_plan_text, plan_texts, state["rewriten_content"])
 
     response = get_llm_model(temperature=0.2, max_token=2000).invoke(prompt.to_messages())
     
@@ -242,23 +230,6 @@ def respond_to_recommendation_intent_node(state: State):
         "messages": [AIMessage(content=response.content)],
     }
 
-# 임베딩 과정에서 키워드를 검색하기 쉽게 질문에서 키워드를 추출하는 노드
-def make_keywords_query_node(state: State):
-    content = state["rewriten_content"]
-    prompt = get_keywords_prompt(content)
-    
-    response = get_llm_model(temperature=0.0, max_token=200).invoke(prompt.to_messages())
-
-    try:
-        result = json.loads(response.content)
-    except Exception:
-        result = {}
-
-    return{
-        "keywords": result
-    }
-
-
 
 graph_builder = StateGraph(State)
 
@@ -273,7 +244,6 @@ graph_builder.add_node("respond_to_unrelated_rateplan_query_node", respond_to_un
 graph_builder.add_node("is_recommendation_intent_node", is_recommendation_intent_node)
 graph_builder.add_node("respond_to_non_recommendation_intent_node", respond_to_non_recommendation_intent_node)
 graph_builder.add_node("respond_to_recommendation_intent_node", respond_to_recommendation_intent_node)
-graph_builder.add_node("make_keywords_query_node", make_keywords_query_node)
 
 
 # -------- 분기 함수 구성 --------
@@ -330,11 +300,9 @@ graph_builder.add_conditional_edges(
     search_branch4,
     path_map={
         "non_recommendation_intent": "respond_to_non_recommendation_intent_node",
-        "recommendation_intent": "make_keywords_query_node"
+        "recommendation_intent": "respond_to_recommendation_intent_node"
     },
 )
-
-graph_builder.add_edge("make_keywords_query_node","respond_to_recommendation_intent_node")
 
 # 종료 지점 설정
 graph_builder.add_edge("respond_to_unsafe_query_node", END)
