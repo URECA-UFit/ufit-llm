@@ -124,17 +124,29 @@ def stringfiy_user_rate_plan(user: UserInfoDTO) -> str:
             return f"- {title}: 없음"
         return f"- {title}:\n" + "\n".join([f"  • {k}: {v}" for k, v in benefit_dict.items()])
 
-    return (
-        f"요금제 정보:\n"
-        f"- 이름: {plan.plan_name}\n"
-        f"- 요약: {plan.summary}\n"
-        f"- 기본요금: {plan.monthly_fee:,}원\n"
-        f"- 할인 후 요금: {plan.discount_fee:,}원\n"
-        f"- 데이터 제공량: {plan.data_allowance or '정보 없음'}\n"
-        f"- 음성 제공량: {plan.voice_allowance or '정보 없음'}\n"
-        f"- 문자 제공량: {plan.sms_allowance or '정보 없음'}\n"
-        f"{format_benefits(plan.basic_benefit, '기본 혜택')}\n"
-        f"{format_benefits(plan.special_benefit, '특별 혜택')}\n"
-        f"{format_benefits(plan.discount_benefit, '할인 혜택')}\n"
-        f"- 사용 가능 여부: {'사용 가능' if plan.is_enabled else '사용 불가'}\n"
-    )
+    result = [
+        f"요금제 정보:",
+        f"- 이름: {plan.plan_name}",
+        f"- 요약: {plan.summary}",
+        f"- 기본요금: {plan.monthly_fee:,}원",
+        f"- 할인 후 요금: {plan.discount_fee:,}원",
+    ]
+
+    if plan.data_allowance:
+        result.append(f"- 데이터 제공량: {plan.data_allowance}")
+    if plan.voice_allowance:
+        result.append(f"- 음성 제공량: {plan.voice_allowance}")
+    if plan.sms_allowance:
+        result.append(f"- 문자 제공량: {plan.sms_allowance}")
+
+    for benefit_str in [
+        format_benefits(plan.basic_benefit, "기본 혜택"),
+        format_benefits(plan.special_benefit, "특별 혜택"),
+        format_benefits(plan.discount_benefit, "할인 혜택")
+    ]:
+        if benefit_str:
+            result.append(benefit_str)
+
+    result.append(f"- 사용 가능 여부: {'사용 가능' if plan.is_enabled else '사용 불가'}")
+
+    return "\n".join(result)
