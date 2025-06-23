@@ -71,6 +71,7 @@ def get_safe_query_prompt(input: str):
 
 def get_other_carrier_prompt(input: str):
     """
+
     사용자 질문이 LG U+ 외 타 통신사(SKT, KT, 알뜰폰)에 명시적으로 관련 있는지 판단하는 프롬프트
     """
     prompt = ChatPromptTemplate.from_messages([
@@ -109,6 +110,7 @@ def get_other_carrier_prompt(input: str):
 \"\"\"{input}\"\"\"
 
 이 질문이 LG U+ 외 타 통신사(SKT, KT, 알뜰폰)와 관련된 질문입니까?
+
 
 ## 출력 형식 (JSON)
 {{
