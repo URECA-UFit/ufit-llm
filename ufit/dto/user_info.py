@@ -16,7 +16,7 @@ class MobileDeviceDTO(BaseModel):
     device_name: str
     data_type: DataType
 
-class UserFullInfoDTO(BaseModel):
+class UserInfoDTO(BaseModel):
     email: str
     age: int
     gender: str

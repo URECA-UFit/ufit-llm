@@ -317,7 +317,7 @@ def get_non_recommendation_prompt(content: str):
     ])
     return prompt.format_prompt(content=content)
 
-def get_recommendation_prompt(user_info_text: str, plan_texts: str, user_question: str):
+def get_recommendation_prompt(user_info_text: str, user_rate_plan_text: str, plan_texts: str, user_question: str):
     prompt = ChatPromptTemplate.from_messages([
         SystemMessagePromptTemplate.from_template(
             UFIT_COMMON_STYLE + """
@@ -343,6 +343,9 @@ def get_recommendation_prompt(user_info_text: str, plan_texts: str, user_questio
             """# 사용자 정보
 {user_info_text}
 
+# 사용자가 현재 사용중인 요금제
+{user_rate_plan_text}
+
 # 사용자 질문
 {user_question}
 
@@ -356,71 +359,7 @@ def get_recommendation_prompt(user_info_text: str, plan_texts: str, user_questio
     ])
     return prompt.format_prompt(
         user_info_text=user_info_text,
+        user_rate_plan_text=user_rate_plan_text,
         plan_texts=plan_texts,
         user_question=user_question
     )
-
-def get_keywords_prompt(input: str):
-    return ChatPromptTemplate.from_messages([
-        SystemMessagePromptTemplate.from_template(
-            """당신은 사용자의 질문에서 LG U+ 요금제 추천을 위한 핵심 키워드를 추출하는 어시스턴트입니다.
-
-다음의 명세에 따라 **정확히 JSON 형식**으로 출력해야 합니다.  
-키 이름, 값은 절대로 변경하지 말고, 설명이나 주석도 절대 추가하지 마세요.
-
-각 항목은 리스트 형태의 값으로 출력되며, **반드시 최대 1개의 값만** 포함됩니다.  
-명확한 값이 없으면  ""스트링으로 출력하세요.
-
-[📌 선택 가능한 값 목록]
-- "social_category": "all", "kids", "senior", "soldier", "teen", "young", "youth"
-- "data_category": 
-    - "web, kakaotalk"
-    - "web, kakaotalk, music"
-    - "web, kakaotalk, music, video, game"
-- "device_type":
-    - "5G 스마트폰"
-    - "LTE 전용 태블릿, 빔, 액션캠 등 스마트기기"
-    - "스마트워치"
-    - "키즈워치"
-- "data_sharing": "가능", "불가능"
-- "benefit_keywords":
-    - "U+ 모바일 TV 기본 월정액 무료"
-    - "U+ 모바일 TV 라이트 무료"
-    - "U+멤버십 VIP 등급 혜택"
-    - "U⁺ 모바일tv 기본 월정액 무료"
-    - "데이터 나눠쓰기"
-    - "로밍 혜택"
-    - "미디어 서비스 기본 제공"
-    - "바이브 300회 음악감상"
-    - "바이브 앱 음악감상"
-    - "실버지킴이"
-    - "원넘버(워치에서도 휴대폰과 같은 번호를 사용 할 수 있는 서비스)"
-    - "월정액 할인"
-    - "참 쉬운 가족 결합"
-    - "태블릿/스마트기기 월정액 할인"
-    - "프리미엄 서비스 기본 제공"
-    - "프리미엄 서비스 기본 제공(택1) : 삼성팩, 애플디바이스팩, 멀티팩(아이들나라 스탠다드+러닝, 바이브 음악감상, 지니뮤직 음악감상, 밀리의 서재 중 1개 선택)"
-    - "피싱/해킹 안심서비스 무료 이용 프로모션"
-
-⚠️ 출력 예시 (오직 아래 형식으로 출력하세요):
-```json
-{{
-  "social_category": "youth",
-  "data_category": "web, kakaotalk, music",
-  "device_type": "5G 스마트폰",
-  "data_sharing": "불가능",
-  "benefit_keywords": "로밍 혜택"
-}}
-"""
-        ),
-        HumanMessagePromptTemplate.from_template(
-            """# 사용자 질문:
-\"\"\"{input}\"\"\"
-
-위 사용자 질문에 포함된 요금제 관련 키워드를 추출해 주세요.
-
-⚠️ 출력은 반드시 위에서 제시한 JSON 형식을 따르며,
-키 이름은 변경하지 말고, 존재하지 않는 항목은 생략해 주세요.
-"""
-        )
-    ]).format_prompt(input=input)
