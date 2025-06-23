@@ -13,20 +13,18 @@ def get_user_info(user_id: int, postgre_db: Session, mongo_db: Database ) -> Use
     
     if(user_id==-1): return None
 
-    # 1) PostgreSQL에서 사용자 조회
     user = postgre_db.query(User).filter(User.user_id == user_id).first()
     if user is None:
-        # 사용자가 없으면 404 에러 반환
+
         raise HTTPException(
             status_code=404,
             detail=f"User with id {user_id} not found."
         )
 
-    # 2) MongoDB에서 해당 사용자의 요금제 조회
     raw_plan = mongo_db.rate_plans.find_one({"_id": ObjectId(user.rate_plan_id)})
 
     if raw_plan is None:
-        # 요금제가 없으면 404 에러 반환
+
         raise HTTPException(
             status_code=404,
             detail=f"Rate plan {user.rate_plan_id} not found."
@@ -34,13 +32,11 @@ def get_user_info(user_id: int, postgre_db: Session, mongo_db: Database ) -> Use
     
     rate_plan = RatePlan.model_validate(raw_plan)
 
-    # 3) PostgreSQL에서 사용량과 디바이스 정보 조회
     call_usages = postgre_db.query(CallUsage).filter(CallUsage.user_id == user_id).all()
     data_usages = postgre_db.query(DataUsage).filter(DataUsage.user_id == user_id).all()
     sms_usages  = postgre_db.query(SmsUsage).filter(SmsUsage.user_id == user_id).all()
     devices     = postgre_db.query(MobileDevice).filter(MobileDevice.user_id == user_id).all()
 
-    # 4) DTO 변환 함수 호출 및 반환
     return to_user_full_info_dto(
         user=user,
         rate_plan=rate_plan,
@@ -49,7 +45,6 @@ def get_user_info(user_id: int, postgre_db: Session, mongo_db: Database ) -> Use
         sms_usages=sms_usages,
         devices=devices,
     )
-
 
 def to_user_full_info_dto(
     user: User,
@@ -88,12 +83,10 @@ def to_user_full_info_dto(
         ],
     )
 
-
 def stringify_user_info(user: UserInfoDTO) -> str:
     if user is None:
         return "사용자 정보가 없습니다."
     
-    # Handle None gender case with default fallback
     gender_value = user.gender if user.gender else "unknown"
     gender_kor = {"male": "남성", "female": "여성", "MAN": "남성", "WOMAN": "여성"}.get(gender_value.lower(), "정보 없음")
 
@@ -118,7 +111,6 @@ def stringfiy_user_rate_plan(user: UserInfoDTO) -> str:
     if plan is None:
         return "요금제 정보가 없습니다."
 
-    # 각 혜택 딕셔너리를 사람이 읽기 쉽게 변환
     def format_benefits(benefit_dict: Optional[Dict[str, Any]], title: str) -> str:
         if not benefit_dict:
             return f"- {title}: 없음"

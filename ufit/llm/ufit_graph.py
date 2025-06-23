@@ -38,8 +38,6 @@ MAX_TURNS = 5
 respond_to_unsafe_query = "죄송합니다. 해당 요청은 서비스 이용 정책에 따라 처리할 수 없습니다.\n다른 질문을 해주세요."
 respond_to_other_carrier_query = "죄송합니다. 저는 LG U+ 요금제에 한해 상담을 제공하고 있습니다.\n타 통신사 관련 문의는 답변드릴 수 없습니다."
 
-
-# -------- 그래프 상태 정의 --------
 class State(TypedDict):
     messages: Annotated[list[BaseMessage], add_messages]
     history: MongoDBChatMessageHistory
@@ -55,9 +53,6 @@ class State(TypedDict):
     b_plan: PlanDTO
     answer: str
 
-
-# -------- 노드 함수 정의 --------
-# 금칙어 처리하는 노드(욕설, 개인정보 추출 등)
 def is_safe_query_node(state: State):
 
     prompt = get_safe_query_prompt(input=state["content"])
@@ -67,15 +62,12 @@ def is_safe_query_node(state: State):
         result = json.loads(response.content)
         is_safe = result["is_safe"]
     except Exception as e:
-        # 파싱을 실패할 수 있어 기본적으로 unsafe 처리한다.
         is_safe = False
 
     return {
         "is_safe": is_safe
     }
 
-
-# 금칙어 질문에 응답 반환하는 노드(정적 대답)"""
 def respond_to_unsafe_query_node(state: State):
     result = respond_to_unsafe_query
     return {
@@ -83,7 +75,6 @@ def respond_to_unsafe_query_node(state: State):
         "messages": [AIMessage(content=result)]
     }
 
-# 타 통신사 질문인지 판단하는 노드
 def is_other_carrier_query_node(state: State):
     content = state["rewriten_content"]
 
@@ -94,20 +85,18 @@ def is_other_carrier_query_node(state: State):
         result = json.loads(response.content)
         is_other_carrier = result["is_other_carrier"]
     except Exception:
-        is_other_carrier = False  # 파싱 실패 시 기본값
+        is_other_carrier = False 
 
     return {
         "is_other_carrier": is_other_carrier
     }
 
-# 타 통신사 질문에 응답 반환하는 노드(정적 대답)
 def respond_to_other_carrier_query_node(state: State):
     return {
         "answer": respond_to_other_carrier_query,
         "messages": [AIMessage(content=respond_to_other_carrier_query)]
     }
 
-# 멀티턴을 위해 사용자 질문을 정제하는 노드
 def rewrite_query_node(state: State):
     prompt = get_rewrite_query_prompt(state["messages"][-5:],state["content"])
     response = get_llm_model(temperature=0.0, max_token=500).invoke(prompt)
@@ -117,7 +106,6 @@ def rewrite_query_node(state: State):
         "rewriten_content": rewriten_content
     }
 
-# 질문이 요금제 관련인지 판단하는 노드
 def is_rateplan_related_query_node(state: State):
     content = state["rewriten_content"]
     
@@ -128,14 +116,12 @@ def is_rateplan_related_query_node(state: State):
         result = json.loads(response.content)
         is_related = result["is_rateplan_related"]
     except Exception:
-        is_related = False  # 파싱 실패 시 기본값
+        is_related = False  
 
     return {
         "is_rateplan_related": is_related
     }
 
-
-# 요금제 관련 없는 질문에 응답을 반환하는 노드(LLM 대답)"""
 def respond_to_unrelated_rateplan_query_node(state: State):
     prompt = get_unrelated_rateplan_prompt(state["rewriten_content"])
 
@@ -148,8 +134,6 @@ def respond_to_unrelated_rateplan_query_node(state: State):
         "messages": [AIMessage(content=result)]
     }
 
-
-# 추천 의도가 있는지 판단하는 노드
 def is_recommendation_intent_node(state: State):
     prompt = get_is_recommendation_intent_prompt(state["rewriten_content"])
     response = get_llm_model(temperature=0.0, max_token=100).invoke(prompt.to_messages())
@@ -158,7 +142,7 @@ def is_recommendation_intent_node(state: State):
         is_recommendation_intent = result.get("is_recommendation_intent", False)
         is_my_recommend = result.get("is_my_recommend", False)
     except Exception:
-        is_recommendation_intent = False  # 파싱 실패 시 기본값
+        is_recommendation_intent = False  
 
 
     return {
@@ -166,8 +150,6 @@ def is_recommendation_intent_node(state: State):
         "is_my_recommend": is_my_recommend
     }
 
-
-# 추천 의도가 없을 경우의 응답하는 노드(LLM 대답)
 def respond_to_non_recommendation_intent_node(state: State):
     prompt = get_non_recommendation_prompt(state["rewriten_content"])
     response = get_llm_model(temperature=0.05, max_token=1000).invoke(prompt.to_messages())
@@ -181,8 +163,6 @@ def respond_to_non_recommendation_intent_node(state: State):
         "message": [AIMessage(content=content)]
     }
 
-
-# 추천 의도가 있을 경우 요금제 추천 응답하는 노드(LLM 대답)
 def extract_plan_dto(doc, default_name):
     metadata = doc.metadata or {}
     return PlanDTO(
@@ -204,8 +184,6 @@ def respond_to_recommendation_intent_node(state: State):
     else:
         retriever_text = state["rewriten_content"]
 
-
-    # 유사도 검색
     docs = vectorstore.similarity_search(retriever_text, NUM_OF_RECOMMEND_PLAN)
     
     plan_texts = "\n\n".join(
@@ -215,14 +193,12 @@ def respond_to_recommendation_intent_node(state: State):
 
     response = get_llm_model(temperature=0.2, max_token=2000).invoke(prompt.to_messages())
     
-
     a_plan = extract_plan_dto(docs[0], "없음") if len(docs) > 0 else PlanDTO(planId="", name="")
     b_plan = extract_plan_dto(docs[1], "없음") if len(docs) > 1 else PlanDTO(planId="", name="")
 
     
     state["history"].add_user_message(state["content"])
 
-    # 8. 결과 반환
     return {
         "answer": response.content,
         "a_plan": a_plan,
@@ -233,7 +209,6 @@ def respond_to_recommendation_intent_node(state: State):
 
 graph_builder = StateGraph(State)
 
-# -------- 노드 구성 --------
 graph_builder.add_node("is_safe_query_node", is_safe_query_node)
 graph_builder.add_node("rewrite_query_node", rewrite_query_node)
 graph_builder.add_node("respond_to_unsafe_query_node", respond_to_unsafe_query_node)
@@ -245,8 +220,6 @@ graph_builder.add_node("is_recommendation_intent_node", is_recommendation_intent
 graph_builder.add_node("respond_to_non_recommendation_intent_node", respond_to_non_recommendation_intent_node)
 graph_builder.add_node("respond_to_recommendation_intent_node", respond_to_recommendation_intent_node)
 
-
-# -------- 분기 함수 구성 --------
 def search_branch1(state: State):
     if (state["is_safe"] == True): return "safe"
     elif (state["is_safe"] == False): return "unsafe"
@@ -263,7 +236,6 @@ def search_branch4(state: State):
     if (state["is_recommendation_intent"] == True): return "recommendation_intent"
     elif (state["is_recommendation_intent"] == False): return "non_recommendation_intent"
 
-# -------- 엣지 구성 --------
 graph_builder.add_edge(START, "is_safe_query_node")
 
 graph_builder.add_conditional_edges(
@@ -304,15 +276,12 @@ graph_builder.add_conditional_edges(
     },
 )
 
-# 종료 지점 설정
 graph_builder.add_edge("respond_to_unsafe_query_node", END)
 graph_builder.add_edge("respond_to_other_carrier_query_node", END)
 graph_builder.add_edge("respond_to_unrelated_rateplan_query_node", END)
 graph_builder.add_edge("respond_to_non_recommendation_intent_node", END)
 graph_builder.add_edge("respond_to_recommendation_intent_node", END)
 
-# -------- 그래프 완성 -------
 ufit_graph = graph_builder.compile()
-
 
 display(Image(ufit_graph.get_graph().draw_mermaid_png()))

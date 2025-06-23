@@ -30,8 +30,6 @@ vectorstore = PGVector(
     collection_name=COLLECTION_NAME_VECTOR,
 )
 
-
-# 요금제 임베딩
 def embed_single_rateplan(request: callRatePlanRequest):
 
     plan_data = {
@@ -76,7 +74,6 @@ def embed_single_rateplan(request: callRatePlanRequest):
         )
         vectorstore.add_documents([doc])
     except Exception as e:
-        print(f"[벡터 임베딩 에러] {e}")
         raise VectorCreateException(str(e))
 
 
@@ -90,7 +87,6 @@ def _acquire_pg_conn(store: PGVector):
         PGVECTOR_CONNECTION_STRING
     )
     return engine.connect(), True
-
 
 def delete_rateplan_vector(rateplan_id: str):
     try:
@@ -106,13 +102,8 @@ def delete_rateplan_vector(rateplan_id: str):
         with conn.begin():
             result = conn.execute(sql, {"mid": str(rateplan_id)})
 
-        print(f"[DEBUG] deleted rows → {result.rowcount}")
         if should_close:
             conn.close()
 
-        if result.rowcount == 0:
-            print("[주의] 해당 mongo_id 레코드가 존재하지 않습니다.")
-
     except Exception as e:
-        print(f"[벡터 삭제 에러] {e}")
         raise VectorDeleteException(str(e))
